@@ -5,9 +5,8 @@
 package spp.domain.dto;
 
 public class AdministratorDTO {
-
     private int id;
-    private String adminUsername;
+    private String username;
     private int userId;
 
     public AdministratorDTO() {
@@ -21,12 +20,12 @@ public class AdministratorDTO {
         this.id = id;
     }
 
-    public String getAdminUsername() {
-        return adminUsername;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAdminUsername(String adminUsername) {
-        this.adminUsername = adminUsername;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getUserId() {
@@ -36,5 +35,6 @@ public class AdministratorDTO {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     
 }

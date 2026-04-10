@@ -6,7 +6,7 @@ package spp.domain.dto;
 
 public class ProjectRequestDTO {
     private int id;
-    private String priority;
+    private int priority;
     private int internId;
     private int projectId;
 
@@ -21,11 +21,11 @@ public class ProjectRequestDTO {
         this.id = id;
     }
 
-    public String getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
@@ -44,5 +44,6 @@ public class ProjectRequestDTO {
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
-
+    
+    
 }

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class CoordinatorDTO {
 
     private int id;
-    private String personalNumber; // Se mapea de numeroPersonal
+    private String personalNumber;
     private String name;
     private String paternalSurname;
     private String maternalSurname;

@@ -6,7 +6,7 @@ package spp.domain.dto;
 
 public class RecordDTO {
     private int id;
-    private String schoolPeriod;
+    private int schoolPeriodId;
     private double finalGrade;
     private int internId;
     private int professorId;
@@ -23,12 +23,12 @@ public class RecordDTO {
         this.id = id;
     }
 
-    public String getSchoolPeriod() {
-        return schoolPeriod;
+    public int getSchoolPeriodId() {
+        return schoolPeriodId;
     }
 
-    public void setSchoolPeriod(String schoolPeriod) {
-        this.schoolPeriod = schoolPeriod;
+    public void setSchoolPeriodId(int schoolPeriodId) {
+        this.schoolPeriodId = schoolPeriodId;
     }
 
     public double getFinalGrade() {
@@ -63,4 +63,5 @@ public class RecordDTO {
         this.projectId = projectId;
     }
 
+    
 }

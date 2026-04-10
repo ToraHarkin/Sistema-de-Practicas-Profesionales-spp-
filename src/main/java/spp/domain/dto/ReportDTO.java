@@ -12,30 +12,14 @@ public class ReportDTO {
     private String type;
     private LocalDateTime deliveryDate;
     private int nrc;
-    private String schoolPeriod;
+    private int schoolPeriodId;
     private String coveredPeriod; // Se mapea de periodoAbarcaReporte
     private int coveredHours;
-    private String description;   // Se mapea de descripcion
+    private String description;
     private int internId;
     private int documentId;
 
     public ReportDTO() {
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCoveredPeriod() {
-        return coveredPeriod;
-    }
-
-    public void setCoveredPeriod(String coveredPeriod) {
-        this.coveredPeriod = coveredPeriod;
     }
 
     public int getId() {
@@ -70,12 +54,20 @@ public class ReportDTO {
         this.nrc = nrc;
     }
 
-    public String getSchoolPeriod() {
-        return schoolPeriod;
+    public int getSchoolPeriodId() {
+        return schoolPeriodId;
     }
 
-    public void setSchoolPeriod(String schoolPeriod) {
-        this.schoolPeriod = schoolPeriod;
+    public void setSchoolPeriodId(int schoolPeriodId) {
+        this.schoolPeriodId = schoolPeriodId;
+    }
+
+    public String getCoveredPeriod() {
+        return coveredPeriod;
+    }
+
+    public void setCoveredPeriod(String coveredPeriod) {
+        this.coveredPeriod = coveredPeriod;
     }
 
     public int getCoveredHours() {
@@ -84,6 +76,14 @@ public class ReportDTO {
 
     public void setCoveredHours(int coveredHours) {
         this.coveredHours = coveredHours;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getInternId() {
@@ -101,6 +101,6 @@ public class ReportDTO {
     public void setDocumentId(int documentId) {
         this.documentId = documentId;
     }
-    
+
     
 }

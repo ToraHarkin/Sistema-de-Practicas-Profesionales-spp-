@@ -11,19 +11,11 @@ public class ProfessorDTO {
     private String name;
     private String paternalSurname;
     private String maternalSurname;
-    private String shift;
+    private int shiftId;
     private String serviceTime;
     private int userId;
 
     public ProfessorDTO() {
-    }
-
-    public String getPersonalNumber() {
-        return personalNumber;
-    }
-
-    public void setPersonalNumber(String personalNumber) {
-        this.personalNumber = personalNumber;
     }
 
     public int getId() {
@@ -32,6 +24,14 @@ public class ProfessorDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPersonalNumber() {
+        return personalNumber;
+    }
+
+    public void setPersonalNumber(String personalNumber) {
+        this.personalNumber = personalNumber;
     }
 
     public String getName() {
@@ -58,12 +58,12 @@ public class ProfessorDTO {
         this.maternalSurname = maternalSurname;
     }
 
-    public String getShift() {
-        return shift;
+    public int getShiftId() {
+        return shiftId;
     }
 
-    public void setShift(String shift) {
-        this.shift = shift;
+    public void setShiftId(int shiftId) {
+        this.shiftId = shiftId;
     }
 
     public String getServiceTime() {
@@ -81,6 +81,6 @@ public class ProfessorDTO {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
+
     
 }

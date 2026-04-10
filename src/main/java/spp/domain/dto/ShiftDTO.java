@@ -4,13 +4,11 @@
  */
 package spp.domain.dto;
 
-public class SelfEvaluationCriterionDTO {
+public class ShiftDTO {
     private int id;
-    private String name;
-    private int score;
-    private int selfEvaluationId;
+    private String name; // Aquí irá "Matutino" o "Vespertino"
 
-    public SelfEvaluationCriterionDTO() {
+    public ShiftDTO() {
     }
 
     public int getId() {
@@ -28,22 +26,6 @@ public class SelfEvaluationCriterionDTO {
     public void setName(String name) {
         this.name = name;
     }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getSelfEvaluationId() {
-        return selfEvaluationId;
-    }
-
-    public void setSelfEvaluationId(int selfEvaluationId) {
-        this.selfEvaluationId = selfEvaluationId;
-    }
-
+    
     
 }
