@@ -10,3 +10,6 @@ build/
 # Ignorar configuraciones de sistema operativo
 .DS_Store
 Thumbs.db
+
+#Ignorar configuración de la base de datos
+db.properties  
