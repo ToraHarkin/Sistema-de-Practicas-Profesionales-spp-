@@ -6,9 +6,16 @@ package spp.domain.service;
 
 import spp.domain.dto.InternDTO;
 import spp.domain.dto.UserDTO;
+import spp.domain.exception.DuplicateEntityException;
+import spp.domain.exception.IncompleteDataException;
+import spp.domain.exception.EntityNotFoundException;
+import spp.data.exception.DataAccessException;
 
 public interface InternService {
-    // Registra al usuario y al practicante como una sola acción
-    void registerIntern(InternDTO intern, UserDTO user); 
-    InternDTO getInternProfile(String enrollment);
+    
+    void registerIntern(InternDTO intern, UserDTO user) 
+        throws DuplicateEntityException, IncompleteDataException, DataAccessException;
+        
+    InternDTO getInternProfile(String enrollment) 
+        throws EntityNotFoundException, DataAccessException;
 }

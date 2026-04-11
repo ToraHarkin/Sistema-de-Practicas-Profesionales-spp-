@@ -5,10 +5,18 @@
 package spp.domain.service;
 
 import spp.domain.dto.SchoolPeriodDTO;
+import spp.domain.exception.DuplicateEntityException;
+import spp.domain.exception.IncompleteDataException;
+import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface SchoolPeriodService {
-    void startNewPeriod(SchoolPeriodDTO period);
-    SchoolPeriodDTO getCurrentPeriod();
-    List<SchoolPeriodDTO> getPeriodHistory();
+    void startNewPeriod(SchoolPeriodDTO period) 
+        throws DuplicateEntityException, IncompleteDataException, DataAccessException;
+        
+    SchoolPeriodDTO getCurrentPeriod() 
+        throws DataAccessException;
+        
+    List<SchoolPeriodDTO> getPeriodHistory() 
+        throws DataAccessException;
 }

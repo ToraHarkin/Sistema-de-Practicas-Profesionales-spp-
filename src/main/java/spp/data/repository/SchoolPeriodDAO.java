@@ -3,15 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author ADMIN
- */
 package spp.data.repository;
 
 import spp.domain.dto.SchoolPeriodDTO;
+import spp.data.exception.DataAccessException;
 
 public interface SchoolPeriodDAO {
-    boolean save(SchoolPeriodDTO period);
-    SchoolPeriodDTO getCurrentPeriod();
+    boolean save(SchoolPeriodDTO period) throws DataAccessException;
+    SchoolPeriodDTO getById(int id) throws DataAccessException;
 }

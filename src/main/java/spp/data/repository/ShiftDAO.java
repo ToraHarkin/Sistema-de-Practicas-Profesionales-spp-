@@ -5,9 +5,10 @@
 package spp.data.repository;
 
 import spp.domain.dto.ShiftDTO;
+import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface ShiftDAO {
-    List<ShiftDTO> getAll();
-    ShiftDTO getById(int id);
+    List<ShiftDTO> getAll() throws DataAccessException;
+    ShiftDTO getById(int id) throws DataAccessException;
 }

@@ -6,9 +6,17 @@ package spp.domain.service;
 
 import spp.domain.dto.ActivityDTO;
 import spp.domain.dto.AssignedActivityDTO;
+import spp.domain.exception.IncompleteDataException;
+import spp.domain.exception.EntityNotFoundException;
+import spp.data.exception.DataAccessException;
 
 public interface ActivityService {
-    void createActivity(ActivityDTO activity);
-    void deliverActivity(AssignedActivityDTO delivery);
-    void gradeActivity(int assignmentId, double grade);
+    void createActivity(ActivityDTO activity) 
+        throws IncompleteDataException, DataAccessException;
+        
+    void deliverActivity(AssignedActivityDTO delivery) 
+        throws IncompleteDataException, EntityNotFoundException, DataAccessException;
+        
+    void gradeActivity(int assignmentId, double grade) 
+        throws IncompleteDataException, EntityNotFoundException, DataAccessException;
 }

@@ -5,9 +5,10 @@
 package spp.data.repository;
 
 import spp.domain.dto.MessageDTO;
+import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface MessageDAO {
-    boolean sendMessage(MessageDTO message, int receiverId);
-    List<MessageDTO> getInboxByUserId(int userId);
+    boolean sendMessage(MessageDTO message, int receiverId) throws DataAccessException;
+    List<MessageDTO> getInboxByUserId(int userId) throws DataAccessException;
 }

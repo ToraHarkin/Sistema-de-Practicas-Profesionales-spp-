@@ -5,9 +5,10 @@
 package spp.data.repository;
 
 import spp.domain.dto.ActivityDTO;
+import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface ActivityDAO {
-    boolean save(ActivityDTO activity);
-    List<ActivityDTO> getByProfessorId(int professorId);
+    boolean save(ActivityDTO activity) throws DataAccessException;
+    List<ActivityDTO> getByProfessorId(int professorId) throws DataAccessException;
 }

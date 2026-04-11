@@ -5,8 +5,9 @@
 package spp.data.repository;
 
 import spp.domain.dto.ProjectResponsibleDTO;
+import spp.data.exception.DataAccessException;
 
 public interface ProjectResponsibleDAO {
-    boolean save(ProjectResponsibleDTO responsible);
-    ProjectResponsibleDTO getByProjectId(int projectId);
+    boolean save(ProjectResponsibleDTO responsible) throws DataAccessException;
+    ProjectResponsibleDTO getByProjectId(int projectId) throws DataAccessException;
 }

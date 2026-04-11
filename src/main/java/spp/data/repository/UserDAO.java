@@ -5,9 +5,10 @@
 package spp.data.repository;
 
 import spp.domain.dto.UserDTO;
+import spp.data.exception.DataAccessException;
 
 public interface UserDAO {
-    boolean save(UserDTO user);
-    UserDTO getByUsername(String username); // Basado en columna 'cuenta' [cite: 202]
-    boolean updateStatus(int id, String status);
+    boolean save(UserDTO user) throws DataAccessException;
+    UserDTO getByUsername(String username) throws DataAccessException;
+    boolean updateStatus(int id, String status) throws DataAccessException;
 }

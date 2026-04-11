@@ -5,8 +5,9 @@
 package spp.data.repository;
 
 import spp.domain.dto.CoordinatorDTO;
+import spp.data.exception.DataAccessException;
 
 public interface CoordinatorDAO {
-    boolean save(CoordinatorDTO coordinator);
-    CoordinatorDTO getByPersonalNumber(String personalNumber); // Columna numero_personal [cite: 369]
+    boolean save(CoordinatorDTO coordinator) throws DataAccessException;
+    CoordinatorDTO getByPersonalNumber(String personalNumber) throws DataAccessException;
 }

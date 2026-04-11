@@ -6,10 +6,19 @@ package spp.domain.service;
 
 import spp.domain.dto.LinkedOrganizationDTO;
 import spp.domain.dto.OrganizationAddressDTO;
+import spp.domain.exception.DuplicateEntityException;
+import spp.domain.exception.IncompleteDataException;
+import spp.domain.exception.EntityNotFoundException;
+import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface OrganizationService {
-    void registerOrganization(LinkedOrganizationDTO organization, OrganizationAddressDTO address);
-    List<LinkedOrganizationDTO> getAllOrganizations();
-    void updateOrganizationContact(int organizationId, String phone, String email);
+    void registerOrganization(LinkedOrganizationDTO organization, OrganizationAddressDTO address) 
+        throws DuplicateEntityException, IncompleteDataException, DataAccessException;
+        
+    List<LinkedOrganizationDTO> getAllOrganizations() 
+        throws DataAccessException;
+        
+    void updateOrganizationContact(int organizationId, String phone, String email) 
+        throws IncompleteDataException, EntityNotFoundException, DataAccessException;
 }

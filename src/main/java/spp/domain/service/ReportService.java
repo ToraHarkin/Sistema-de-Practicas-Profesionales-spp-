@@ -5,10 +5,18 @@
 package spp.domain.service;
 
 import spp.domain.dto.ReportDTO;
+import spp.domain.exception.IncompleteDataException;
+import spp.domain.exception.FileStorageException;
+import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface ReportService {
-    void uploadReport(ReportDTO report);
-    List<ReportDTO> getInternReports(int internId);
-    void validateReport(int reportId, String observations);
+    void uploadReport(ReportDTO report) 
+        throws IncompleteDataException, FileStorageException, DataAccessException;
+        
+    List<ReportDTO> getInternReports(int internId) 
+        throws DataAccessException;
+        
+    void validateReport(int reportId, String observations) 
+        throws IncompleteDataException, DataAccessException;
 }

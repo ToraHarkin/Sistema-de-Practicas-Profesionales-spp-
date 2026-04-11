@@ -5,8 +5,9 @@
 package spp.data.repository;
 
 import spp.domain.dto.SelfEvaluationDTO;
+import spp.data.exception.DataAccessException;
 
 public interface SelfEvaluationDAO {
-    boolean save(SelfEvaluationDTO selfEvaluation);
-    SelfEvaluationDTO getByInternId(int internId);
+    boolean save(SelfEvaluationDTO selfEvaluation) throws DataAccessException;
+    SelfEvaluationDTO getByInternId(int internId) throws DataAccessException;
 }

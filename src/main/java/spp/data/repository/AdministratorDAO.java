@@ -3,15 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 
-/**
- *
- * @author ADMIN
- */
 package spp.data.repository;
 
 import spp.domain.dto.AdministratorDTO;
+import spp.data.exception.DataAccessException;
 
 public interface AdministratorDAO {
-    boolean save(AdministratorDTO administrator);
-    AdministratorDTO getByUsername(String username); // Columna cuenta_usuario [cite: 322]
+    boolean save(AdministratorDTO administrator) throws DataAccessException;
+    AdministratorDTO getByUsername(String username) throws DataAccessException;
 }

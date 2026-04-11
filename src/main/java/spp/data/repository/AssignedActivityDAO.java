@@ -5,9 +5,10 @@
 package spp.data.repository;
 
 import spp.domain.dto.AssignedActivityDTO;
+import spp.data.exception.DataAccessException;
 
 public interface AssignedActivityDAO {
-    boolean saveAssignment(AssignedActivityDTO assignment);
-    boolean updateGrade(int assignmentId, double grade);
-    AssignedActivityDTO getAssignment(int internId, int activityId);
+    boolean saveAssignment(AssignedActivityDTO assignment) throws DataAccessException;
+    boolean updateGrade(int assignmentId, double grade) throws DataAccessException;
+    AssignedActivityDTO getAssignment(int internId, int activityId) throws DataAccessException;
 }
