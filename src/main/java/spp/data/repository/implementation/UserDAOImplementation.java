@@ -1,0 +1,87 @@
+package spp.data.repository.implementation;
+
+import spp.data.repository.UserDAO;
+import spp.domain.dto.UserDTO;
+import spp.data.exception.DataAccessException;
+import spp.data.connection.ConnectionPool;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ * Implementation of the UserDAO interface for managing system credentials and statuses.
+ */
+public class UserDAOImplementation implements UserDAO {
+
+    /**
+     * Saves a new user applying an automatic timestamp for their registration date.
+     *
+     * @param user Transfer object containing the account, encrypted password, and initial status.
+     * @return true if the user was created successfully; false otherwise.
+     * @throws DataAccessException If the database rejects the insertion due to technical conflicts.
+     */
+    @Override
+    public boolean save(UserDTO user) throws DataAccessException {
+        String query = "INSERT INTO usuario (contraseña, cuenta, estado, fecha_registro) VALUES (?, ?, ?, NOW())";
+        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, user.getPassword());
+            ps.setString(2, user.getAccount());
+            ps.setString(3, user.getStatus());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DataAccessException("Error registering the new user account.", e);
+        }
+    }
+
+    /**
+     * Searches for a user based on their account name for authentication processes.
+     *
+     * @param account The unique username (account) in the system.
+     * @return A retrieved UserDTO object, or null if the credentials do not match.
+     * @throws DataAccessException If communication with the MySQL server is lost.
+     */
+    @Override
+    public UserDTO getByAccount(String account) throws DataAccessException {
+        String query = "SELECT * FROM usuario WHERE cuenta = ?";
+        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, account);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    UserDTO user = new UserDTO();
+                    user.setId(rs.getInt("id_usuario"));
+                    user.setPassword(rs.getString("contraseña"));
+                    user.setAccount(rs.getString("cuenta"));
+                    user.setStatus(rs.getString("estado"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error verifying the existence of the user account.", e);
+        }
+        return null;
+    }
+
+    /**
+     * Executes a logical deletion or reactivation by modifying the user's status.
+     *
+     * @param userId The unique internal identifier of the user.
+     * @param status The new status to be assigned (e.g., "Activo", "Inactivo").
+     * @return true if the status change was applied; false if the user does not exist.
+     * @throws DataAccessException If an error occurs during the update process.
+     */
+    @Override
+    public boolean updateStatus(int userId, String status) throws DataAccessException {
+        String query = "UPDATE usuario SET estado = ? WHERE id_usuario = ?";
+        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, status);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DataAccessException("Error processing the user's status change.", e);
+        }
+    }
+}

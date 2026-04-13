@@ -1,13 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.data.repository;
 
 import spp.domain.dto.ProfessorDTO;
 import spp.data.exception.DataAccessException;
+import java.util.List;
 
 public interface ProfessorDAO {
     boolean save(ProfessorDTO professor) throws DataAccessException;
+    boolean update(ProfessorDTO professor) throws DataAccessException;
     ProfessorDTO getByPersonalNumber(String personalNumber) throws DataAccessException;
+    List<ProfessorDTO> getAll() throws DataAccessException;
 }

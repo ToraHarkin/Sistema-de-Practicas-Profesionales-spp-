@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * JavaFX App
@@ -33,8 +34,16 @@ public class App extends Application {
     public static void main(String[] args) {
         System.out.println("INFO: Arrancando el Sistema de Practicas Profesionales...");
         
-        // Prueba de conexión a la Base de Datos MySQL
-        spp.data.connection.DatabaseConnection.getConnection();
+        // Nueva Prueba de conexión a la Base de Datos MySQL usando el Pool de Ángel
+        try {
+            spp.data.connection.ConnectionPool.getInstanceConectionPool().getConnectionPool();
+            System.out.println("INFO: ¡Conexión exitosa a la base de datos usando DBCP2!");
+        } catch (SQLException e) {
+            System.out.println("ERROR FATAL: No se pudo conectar a la base de datos.");
+            System.out.println("Detalles: " + e.getMessage());
+            // Si la base de datos está caída, el sistema de todos modos abrirá la ventana de JavaFX, 
+            // pero ya sabemos por la consola que hay un problema.
+        }
         
         launch();
     }

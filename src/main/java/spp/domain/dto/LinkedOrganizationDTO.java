@@ -1,19 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
 public class LinkedOrganizationDTO {
-
     private int id;
     private String name;
     private String phone;
     private String email;
     private String sector;
-
-    public LinkedOrganizationDTO() {
-    }
 
     public int getId() {
         return id;
@@ -54,4 +46,6 @@ public class LinkedOrganizationDTO {
     public void setSector(String sector) {
         this.sector = sector;
     }
+
+    
 }

@@ -1,15 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
 public class ProjectDTO {
-
     private int id;
     private String name;
-    private int internCapacity;
-    private String availabilityStatus;
+    private int capacity;
+    private int availability;
     private String description;
     private int linkedOrganizationId;
 
@@ -32,20 +27,20 @@ public class ProjectDTO {
         this.name = name;
     }
 
-    public int getInternCapacity() {
-        return internCapacity;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setInternCapacity(int internCapacity) {
-        this.internCapacity = internCapacity;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
-    public String getAvailabilityStatus() {
-        return availabilityStatus;
+    public int getAvailability() {
+        return availability;
     }
 
-    public void setAvailabilityStatus(String availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
+    public void setAvailability(int availability) {
+        this.availability = availability;
     }
 
     public String getDescription() {

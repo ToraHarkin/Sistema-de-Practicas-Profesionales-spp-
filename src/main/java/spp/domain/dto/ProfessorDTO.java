@@ -1,22 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
 public class ProfessorDTO {
-
     private int id;
-    private String personalNumber; // Se mapea de numeroPersonal
+    private String personalNumber;
     private String name;
     private String paternalSurname;
     private String maternalSurname;
-    private int shiftId;
-    private String serviceTime;
+    private int monthsOfService;
     private int userId;
-
-    public ProfessorDTO() {
-    }
 
     public int getId() {
         return id;
@@ -58,20 +49,12 @@ public class ProfessorDTO {
         this.maternalSurname = maternalSurname;
     }
 
-    public int getShiftId() {
-        return shiftId;
+    public int getMonthsOfService() {
+        return monthsOfService;
     }
 
-    public void setShiftId(int shiftId) {
-        this.shiftId = shiftId;
-    }
-
-    public String getServiceTime() {
-        return serviceTime;
-    }
-
-    public void setServiceTime(String serviceTime) {
-        this.serviceTime = serviceTime;
+    public void setMonthsOfService(int monthsOfService) {
+        this.monthsOfService = monthsOfService;
     }
 
     public int getUserId() {
