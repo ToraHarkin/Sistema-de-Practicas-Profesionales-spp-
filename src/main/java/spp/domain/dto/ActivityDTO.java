@@ -1,20 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class ActivityDTO {
     private int id;
     private String title;
-    private LocalDateTime deadline;
+    private Timestamp deadline;
     private String description;
     private int professorId;
-
-    public ActivityDTO() {
-    }
 
     public int getId() {
         return id;
@@ -32,11 +25,11 @@ public class ActivityDTO {
         this.title = title;
     }
 
-    public LocalDateTime getDeadline() {
+    public Timestamp getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(LocalDateTime deadline) {
+    public void setDeadline(Timestamp deadline) {
         this.deadline = deadline;
     }
 
@@ -56,4 +49,5 @@ public class ActivityDTO {
         this.professorId = professorId;
     }
 
+    
 }

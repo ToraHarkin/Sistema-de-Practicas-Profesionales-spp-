@@ -1,22 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-import java.time.LocalDate;
-
 public class CoordinatorDTO {
-
     private int id;
     private String personalNumber;
     private String name;
     private String paternalSurname;
     private String maternalSurname;
-    private LocalDate serviceTime;
+    private int monthsOfService;
     private int userId;
 
-    public CoordinatorDTO() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPersonalNumber() {
@@ -25,14 +23,6 @@ public class CoordinatorDTO {
 
     public void setPersonalNumber(String personalNumber) {
         this.personalNumber = personalNumber;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -59,12 +49,12 @@ public class CoordinatorDTO {
         this.maternalSurname = maternalSurname;
     }
 
-    public LocalDate getServiceTime() {
-        return serviceTime;
+    public int getMonthsOfService() {
+        return monthsOfService;
     }
 
-    public void setServiceTime(LocalDate serviceTime) {
-        this.serviceTime = serviceTime;
+    public void setMonthsOfService(int monthsOfService) {
+        this.monthsOfService = monthsOfService;
     }
 
     public int getUserId() {
@@ -74,6 +64,6 @@ public class CoordinatorDTO {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
+
     
 }

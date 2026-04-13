@@ -1,21 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-public class ProjectResponsibleDTO {
+public class ProjectManagerDTO {
     private int id;
     private String name;
     private String paternalSurname;
     private String maternalSurname;
-    private String charge;
+    private String position;
     private String phone;
     private String email;
     private int projectId;
-
-    public ProjectResponsibleDTO() {
-    }
 
     public int getId() {
         return id;
@@ -49,12 +42,12 @@ public class ProjectResponsibleDTO {
         this.maternalSurname = maternalSurname;
     }
 
-    public String getCharge() {
-        return charge;
+    public String getPosition() {
+        return position;
     }
 
-    public void setCharge(String charge) {
-        this.charge = charge;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getPhone() {
@@ -80,5 +73,6 @@ public class ProjectResponsibleDTO {
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
+
     
 }

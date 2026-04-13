@@ -1,26 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class ReportDTO {
-
     private int id;
     private String type;
-    private LocalDateTime deliveryDate;
-    private int nrc;
-    private int schoolPeriodId;
-    private String coveredPeriod; // Se mapea de periodoAbarcaReporte
+    private Timestamp deliveryDate;
+    private String nrc;
+    private String coveredPeriod;
     private int coveredHours;
     private String description;
     private int internId;
-    private int documentId;
-
-    public ReportDTO() {
-    }
+    private int schoolPeriodId;
 
     public int getId() {
         return id;
@@ -38,28 +29,20 @@ public class ReportDTO {
         this.type = type;
     }
 
-    public LocalDateTime getDeliveryDate() {
+    public Timestamp getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(LocalDateTime deliveryDate) {
+    public void setDeliveryDate(Timestamp deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
-    public int getNrc() {
+    public String getNrc() {
         return nrc;
     }
 
-    public void setNrc(int nrc) {
+    public void setNrc(String nrc) {
         this.nrc = nrc;
-    }
-
-    public int getSchoolPeriodId() {
-        return schoolPeriodId;
-    }
-
-    public void setSchoolPeriodId(int schoolPeriodId) {
-        this.schoolPeriodId = schoolPeriodId;
     }
 
     public String getCoveredPeriod() {
@@ -94,13 +77,12 @@ public class ReportDTO {
         this.internId = internId;
     }
 
-    public int getDocumentId() {
-        return documentId;
+    public int getSchoolPeriodId() {
+        return schoolPeriodId;
     }
 
-    public void setDocumentId(int documentId) {
-        this.documentId = documentId;
+    public void setSchoolPeriodId(int schoolPeriodId) {
+        this.schoolPeriodId = schoolPeriodId;
     }
 
-    
 }

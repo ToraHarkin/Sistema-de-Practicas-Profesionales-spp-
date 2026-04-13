@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class SelfEvaluationDTO {
     private int id;
-    private LocalDateTime registrationDate;
+    private Timestamp registrationDate;
     private int internId;
-
-    public SelfEvaluationDTO() {
-    }
 
     public int getId() {
         return id;
@@ -22,11 +15,11 @@ public class SelfEvaluationDTO {
         this.id = id;
     }
 
-    public LocalDateTime getRegistrationDate() {
+    public Timestamp getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(LocalDateTime registrationDate) {
+    public void setRegistrationDate(Timestamp registrationDate) {
         this.registrationDate = registrationDate;
     }
 
@@ -38,4 +31,5 @@ public class SelfEvaluationDTO {
         this.internId = internId;
     }
 
+    
 }

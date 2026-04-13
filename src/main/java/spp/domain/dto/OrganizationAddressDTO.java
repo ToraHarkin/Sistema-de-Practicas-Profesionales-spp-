@@ -1,20 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
 public class OrganizationAddressDTO {
     private int id;
     private String street;
+    private String externalNumber;
+    private String internalNumber;
     private String neighborhood;
     private String zipCode;
     private String city;
     private String country;
     private int linkedOrganizationId;
-
-    public OrganizationAddressDTO() {
-    }
 
     public int getId() {
         return id;
@@ -30,6 +25,22 @@ public class OrganizationAddressDTO {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public String getExternalNumber() {
+        return externalNumber;
+    }
+
+    public void setExternalNumber(String externalNumber) {
+        this.externalNumber = externalNumber;
+    }
+
+    public String getInternalNumber() {
+        return internalNumber;
+    }
+
+    public void setInternalNumber(String internalNumber) {
+        this.internalNumber = internalNumber;
     }
 
     public String getNeighborhood() {
@@ -71,4 +82,6 @@ public class OrganizationAddressDTO {
     public void setLinkedOrganizationId(int linkedOrganizationId) {
         this.linkedOrganizationId = linkedOrganizationId;
     }
+
+    
 }

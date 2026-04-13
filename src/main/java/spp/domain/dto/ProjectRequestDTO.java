@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
 public class ProjectRequestDTO {
@@ -9,9 +5,6 @@ public class ProjectRequestDTO {
     private int priority;
     private int internId;
     private int projectId;
-
-    public ProjectRequestDTO() {
-    }
 
     public int getId() {
         return id;
@@ -44,6 +37,6 @@ public class ProjectRequestDTO {
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
-    
+
     
 }

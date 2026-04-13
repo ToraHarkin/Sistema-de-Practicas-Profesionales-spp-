@@ -1,14 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package spp.data.repository;
-
 import spp.domain.dto.ShiftDTO;
 import spp.data.exception.DataAccessException;
 import java.util.List;
 
 public interface ShiftDAO {
-    List<ShiftDTO> getAll() throws DataAccessException;
+    boolean save(ShiftDTO shift) throws DataAccessException;
+    boolean update(ShiftDTO shift) throws DataAccessException;
     ShiftDTO getById(int id) throws DataAccessException;
+    List<ShiftDTO> getAll() throws DataAccessException;
 }

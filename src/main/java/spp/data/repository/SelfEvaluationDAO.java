@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package spp.data.repository;
-
 import spp.domain.dto.SelfEvaluationDTO;
 import spp.data.exception.DataAccessException;
+import java.util.List;
 
 public interface SelfEvaluationDAO {
-    boolean save(SelfEvaluationDTO selfEvaluation) throws DataAccessException;
-    SelfEvaluationDTO getByInternId(int internId) throws DataAccessException;
+    boolean save(SelfEvaluationDTO evaluation) throws DataAccessException;
+    boolean update(SelfEvaluationDTO evaluation) throws DataAccessException;
+    SelfEvaluationDTO getById(int id) throws DataAccessException;
+    List<SelfEvaluationDTO> getByInternId(int internId) throws DataAccessException;
 }

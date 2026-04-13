@@ -1,20 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-public class AssignedActivityDTO { // Representa a actividad_asignada_practicante
-    private int id; 
-    private String observations; 
-    private double grade; 
-    private String activityPath; 
-    
+public class AssignedActivityDTO {
+    private int id;
+    private String observations;
+    private double grade;
+    private String activityPath;
     private int internId;
     private int activityId;
-
-    public AssignedActivityDTO() {
-    }
 
     public int getId() {
         return id;
@@ -63,6 +55,6 @@ public class AssignedActivityDTO { // Representa a actividad_asignada_practicant
     public void setActivityId(int activityId) {
         this.activityId = activityId;
     }
-    
+
     
 }

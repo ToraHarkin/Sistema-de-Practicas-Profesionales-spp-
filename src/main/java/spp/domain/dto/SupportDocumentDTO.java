@@ -1,23 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class SupportDocumentDTO {
-
     private int id;
     private String type;
-    private String filePath; // Se mapea de rutaArchivo
+    private String filePath;
     private String extension;
-    private double size; // tamaño en MB/KB
-    private LocalDateTime registrationDate;
+    private long size;
+    private Timestamp date;
+    private double grade;
+    private String observations;
     private int internId;
-
-    public SupportDocumentDTO() {
-    }
+    private int professorId;
 
     public int getId() {
         return id;
@@ -51,20 +46,36 @@ public class SupportDocumentDTO {
         this.extension = extension;
     }
 
-    public double getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(double size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
     }
 
     public int getInternId() {
@@ -74,4 +85,14 @@ public class SupportDocumentDTO {
     public void setInternId(int internId) {
         this.internId = internId;
     }
+
+    public int getProfessorId() {
+        return professorId;
+    }
+
+    public void setProfessorId(int professorId) {
+        this.professorId = professorId;
+    }
+
+    
 }
