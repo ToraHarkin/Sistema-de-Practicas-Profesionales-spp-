@@ -24,17 +24,17 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
     @Override
     public boolean save(OrganizationAddressDTO address) throws DataAccessException {
         String query = "INSERT INTO direccion_organizacion (calle, numero_exterior, numero_interior, colonia, codigo_postal, ciudad, pais, id_organizacion_vinculada) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, address.getStreet());
-            ps.setString(2, address.getExternalNumber());
-            ps.setString(3, address.getInternalNumber()); // Can be null
-            ps.setString(4, address.getNeighborhood());
-            ps.setString(5, address.getZipCode());
-            ps.setString(6, address.getCity());
-            ps.setString(7, address.getCountry());
-            ps.setInt(8, address.getLinkedOrganizationId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, address.getStreet());
+            preparedStatement.setString(2, address.getExternalNumber());
+            preparedStatement.setString(3, address.getInternalNumber()); // Can be null
+            preparedStatement.setString(4, address.getNeighborhood());
+            preparedStatement.setString(5, address.getZipCode());
+            preparedStatement.setString(6, address.getCity());
+            preparedStatement.setString(7, address.getCountry());
+            preparedStatement.setInt(8, address.getLinkedOrganizationId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the organization address.", e);
         }
@@ -50,17 +50,17 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
     @Override
     public boolean update(OrganizationAddressDTO address) throws DataAccessException {
         String query = "UPDATE direccion_organizacion SET calle = ?, numero_exterior = ?, numero_interior = ?, colonia = ?, codigo_postal = ?, ciudad = ?, pais = ? WHERE id_direccion_organizacion = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, address.getStreet());
-            ps.setString(2, address.getExternalNumber());
-            ps.setString(3, address.getInternalNumber());
-            ps.setString(4, address.getNeighborhood());
-            ps.setString(5, address.getZipCode());
-            ps.setString(6, address.getCity());
-            ps.setString(7, address.getCountry());
-            ps.setInt(8, address.getId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, address.getStreet());
+            preparedStatement.setString(2, address.getExternalNumber());
+            preparedStatement.setString(3, address.getInternalNumber());
+            preparedStatement.setString(4, address.getNeighborhood());
+            preparedStatement.setString(5, address.getZipCode());
+            preparedStatement.setString(6, address.getCity());
+            preparedStatement.setString(7, address.getCountry());
+            preparedStatement.setInt(8, address.getId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the organization address.", e);
         }
@@ -76,21 +76,21 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
     @Override
     public OrganizationAddressDTO getByOrganizationId(int organizationId) throws DataAccessException {
         String query = "SELECT * FROM direccion_organizacion WHERE id_organizacion_vinculada = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, organizationId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, organizationId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     OrganizationAddressDTO address = new OrganizationAddressDTO();
-                    address.setId(rs.getInt("id_direccion_organizacion"));
-                    address.setStreet(rs.getString("calle"));
-                    address.setExternalNumber(rs.getString("numero_exterior"));
-                    address.setInternalNumber(rs.getString("numero_interior"));
-                    address.setNeighborhood(rs.getString("colonia"));
-                    address.setZipCode(rs.getString("codigo_postal"));
-                    address.setCity(rs.getString("ciudad"));
-                    address.setCountry(rs.getString("pais"));
-                    address.setLinkedOrganizationId(rs.getInt("id_organizacion_vinculada"));
+                    address.setId(resultSet.getInt("id_direccion_organizacion"));
+                    address.setStreet(resultSet.getString("calle"));
+                    address.setExternalNumber(resultSet.getString("numero_exterior"));
+                    address.setInternalNumber(resultSet.getString("numero_interior"));
+                    address.setNeighborhood(resultSet.getString("colonia"));
+                    address.setZipCode(resultSet.getString("codigo_postal"));
+                    address.setCity(resultSet.getString("ciudad"));
+                    address.setCountry(resultSet.getString("pais"));
+                    address.setLinkedOrganizationId(resultSet.getInt("id_organizacion_vinculada"));
                     return address;
                 }
             }

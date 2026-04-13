@@ -27,13 +27,13 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     @Override
     public boolean save(LinkedOrganizationDTO organization) throws DataAccessException {
         String query = "INSERT INTO organizacion_vinculada (nombre, telefono, correo_electronico, sector) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, organization.getName());
-            ps.setString(2, organization.getPhone());
-            ps.setString(3, organization.getEmail());
-            ps.setString(4, organization.getSector());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, organization.getName());
+            preparedStatement.setString(2, organization.getPhone());
+            preparedStatement.setString(3, organization.getEmail());
+            preparedStatement.setString(4, organization.getSector());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the linked organization.", e);
         }
@@ -49,14 +49,14 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     @Override
     public boolean update(LinkedOrganizationDTO organization) throws DataAccessException {
         String query = "UPDATE organizacion_vinculada SET nombre = ?, telefono = ?, correo_electronico = ?, sector = ? WHERE id_organizacion_vinculada = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, organization.getName());
-            ps.setString(2, organization.getPhone());
-            ps.setString(3, organization.getEmail());
-            ps.setString(4, organization.getSector());
-            ps.setInt(5, organization.getId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, organization.getName());
+            preparedStatement.setString(2, organization.getPhone());
+            preparedStatement.setString(3, organization.getEmail());
+            preparedStatement.setString(4, organization.getSector());
+            preparedStatement.setInt(5, organization.getId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the linked organization.", e);
         }
@@ -72,17 +72,17 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     @Override
     public LinkedOrganizationDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM organizacion_vinculada WHERE id_organizacion_vinculada = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     LinkedOrganizationDTO org = new LinkedOrganizationDTO();
-                    org.setId(rs.getInt("id_organizacion_vinculada"));
-                    org.setName(rs.getString("nombre"));
-                    org.setPhone(rs.getString("telefono"));
-                    org.setEmail(rs.getString("correo_electronico"));
-                    org.setSector(rs.getString("sector"));
+                    org.setId(resultSet.getInt("id_organizacion_vinculada"));
+                    org.setName(resultSet.getString("nombre"));
+                    org.setPhone(resultSet.getString("telefono"));
+                    org.setEmail(resultSet.getString("correo_electronico"));
+                    org.setSector(resultSet.getString("sector"));
                     return org;
                 }
             }
@@ -102,16 +102,16 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     public List<LinkedOrganizationDTO> getAll() throws DataAccessException {
         List<LinkedOrganizationDTO> organizations = new ArrayList<>();
         String query = "SELECT * FROM organizacion_vinculada";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
                 LinkedOrganizationDTO org = new LinkedOrganizationDTO();
-                org.setId(rs.getInt("id_organizacion_vinculada"));
-                org.setName(rs.getString("nombre"));
-                org.setPhone(rs.getString("telefono"));
-                org.setEmail(rs.getString("correo_electronico"));
-                org.setSector(rs.getString("sector"));
+                org.setId(resultSet.getInt("id_organizacion_vinculada"));
+                org.setName(resultSet.getString("nombre"));
+                org.setPhone(resultSet.getString("telefono"));
+                org.setEmail(resultSet.getString("correo_electronico"));
+                org.setSector(resultSet.getString("sector"));
                 organizations.add(org);
             }
         } catch (SQLException e) {

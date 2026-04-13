@@ -24,19 +24,19 @@ public class RecordDAOImplementation implements RecordDAO {
     @Override
     public boolean save(RecordDTO record) throws DataAccessException {
         String query = "INSERT INTO expediente (promedio_final, id_practicante, id_proyecto, id_profesor, id_periodo_escolar) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setDouble(1, record.getFinalGrade());
-            ps.setInt(2, record.getInternId());
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDouble(1, record.getFinalGrade());
+            preparedStatement.setInt(2, record.getInternId());
             
-            if (record.getProjectId() != null) { ps.setInt(3, record.getProjectId()); } 
-            else { ps.setNull(3, java.sql.Types.INTEGER); }
+            if (record.getProjectId() != null) { preparedStatement.setInt(3, record.getProjectId()); } 
+            else { preparedStatement.setNull(3, java.sql.Types.INTEGER); }
             
-            if (record.getProfessorId() != null) { ps.setInt(4, record.getProfessorId()); } 
-            else { ps.setNull(4, java.sql.Types.INTEGER); }
+            if (record.getProfessorId() != null) { preparedStatement.setInt(4, record.getProfessorId()); } 
+            else { preparedStatement.setNull(4, java.sql.Types.INTEGER); }
             
-            ps.setInt(5, record.getSchoolPeriodId());
-            return ps.executeUpdate() > 0;
+            preparedStatement.setInt(5, record.getSchoolPeriodId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error creating the academic record.", e);
         }
@@ -53,11 +53,11 @@ public class RecordDAOImplementation implements RecordDAO {
     @Override
     public boolean updateFinalGrade(int recordId, double finalGrade) throws DataAccessException {
         String query = "UPDATE expediente SET promedio_final = ? WHERE id_expediente = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setDouble(1, finalGrade);
-            ps.setInt(2, recordId);
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDouble(1, finalGrade);
+            preparedStatement.setInt(2, recordId);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the final grade.", e);
         }
@@ -73,23 +73,23 @@ public class RecordDAOImplementation implements RecordDAO {
     @Override
     public RecordDTO getByInternId(int internId) throws DataAccessException {
         String query = "SELECT * FROM expediente WHERE id_practicante = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, internId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, internId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     RecordDTO record = new RecordDTO();
-                    record.setId(rs.getInt("id_expediente"));
-                    record.setFinalGrade(rs.getDouble("promedio_final"));
-                    record.setInternId(rs.getInt("id_practicante"));
+                    record.setId(resultSet.getInt("id_expediente"));
+                    record.setFinalGrade(resultSet.getDouble("promedio_final"));
+                    record.setInternId(resultSet.getInt("id_practicante"));
                     
-                    int projectId = rs.getInt("id_proyecto");
-                    record.setProjectId(rs.wasNull() ? null : projectId);
+                    int projectId = resultSet.getInt("id_proyecto");
+                    record.setProjectId(resultSet.wasNull() ? null : projectId);
                     
-                    int professorId = rs.getInt("id_profesor");
-                    record.setProfessorId(rs.wasNull() ? null : professorId);
+                    int professorId = resultSet.getInt("id_profesor");
+                    record.setProfessorId(resultSet.wasNull() ? null : professorId);
                     
-                    record.setSchoolPeriodId(rs.getInt("id_periodo_escolar"));
+                    record.setSchoolPeriodId(resultSet.getInt("id_periodo_escolar"));
                     return record;
                 }
             }

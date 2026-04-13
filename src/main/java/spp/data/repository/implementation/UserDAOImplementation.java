@@ -24,12 +24,12 @@ public class UserDAOImplementation implements UserDAO {
     @Override
     public boolean save(UserDTO user) throws DataAccessException {
         String query = "INSERT INTO usuario (contraseña, cuenta, estado, fecha_registro) VALUES (?, ?, ?, NOW())";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, user.getPassword());
-            ps.setString(2, user.getAccount());
-            ps.setString(3, user.getStatus());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setString(2, user.getAccount());
+            preparedStatement.setString(3, user.getStatus());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error registering the new user account.", e);
         }
@@ -45,16 +45,16 @@ public class UserDAOImplementation implements UserDAO {
     @Override
     public UserDTO getByAccount(String account) throws DataAccessException {
         String query = "SELECT * FROM usuario WHERE cuenta = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, account);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, account);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     UserDTO user = new UserDTO();
-                    user.setId(rs.getInt("id_usuario"));
-                    user.setPassword(rs.getString("contraseña"));
-                    user.setAccount(rs.getString("cuenta"));
-                    user.setStatus(rs.getString("estado"));
+                    user.setId(resultSet.getInt("id_usuario"));
+                    user.setPassword(resultSet.getString("contraseña"));
+                    user.setAccount(resultSet.getString("cuenta"));
+                    user.setStatus(resultSet.getString("estado"));
                     return user;
                 }
             }
@@ -75,11 +75,11 @@ public class UserDAOImplementation implements UserDAO {
     @Override
     public boolean updateStatus(int userId, String status) throws DataAccessException {
         String query = "UPDATE usuario SET estado = ? WHERE id_usuario = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, status);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, userId);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error processing the user's status change.", e);
         }

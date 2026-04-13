@@ -27,17 +27,17 @@ public class InternDAOImplementation implements InternDAO {
     @Override
     public boolean save(InternDTO intern) throws DataAccessException {
         String query = "INSERT INTO practicante (matricula, nombre, apellido_paterno, apellido_materno, edad, sexo, lengua_indigena, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, intern.getEnrollment());
-            ps.setString(2, intern.getName());
-            ps.setString(3, intern.getPaternalSurname());
-            ps.setString(4, intern.getMaternalSurname());
-            ps.setInt(5, intern.getAge());
-            ps.setString(6, intern.getGender());
-            ps.setString(7, intern.getIndigenousLanguage());
-            ps.setInt(8, intern.getUserId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, intern.getEnrollment());
+            preparedStatement.setString(2, intern.getName());
+            preparedStatement.setString(3, intern.getPaternalSurname());
+            preparedStatement.setString(4, intern.getMaternalSurname());
+            preparedStatement.setInt(5, intern.getAge());
+            preparedStatement.setString(6, intern.getGender());
+            preparedStatement.setString(7, intern.getIndigenousLanguage());
+            preparedStatement.setInt(8, intern.getUserId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the intern to the database.", e);
         }
@@ -53,16 +53,16 @@ public class InternDAOImplementation implements InternDAO {
     @Override
     public boolean update(InternDTO intern) throws DataAccessException {
         String query = "UPDATE practicante SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, edad = ?, sexo = ?, lengua_indigena = ? WHERE matricula = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, intern.getName());
-            ps.setString(2, intern.getPaternalSurname());
-            ps.setString(3, intern.getMaternalSurname());
-            ps.setInt(4, intern.getAge());
-            ps.setString(5, intern.getGender());
-            ps.setString(6, intern.getIndigenousLanguage());
-            ps.setString(7, intern.getEnrollment());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, intern.getName());
+            preparedStatement.setString(2, intern.getPaternalSurname());
+            preparedStatement.setString(3, intern.getMaternalSurname());
+            preparedStatement.setInt(4, intern.getAge());
+            preparedStatement.setString(5, intern.getGender());
+            preparedStatement.setString(6, intern.getIndigenousLanguage());
+            preparedStatement.setString(7, intern.getEnrollment());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the intern's information.", e);
         }
@@ -78,21 +78,21 @@ public class InternDAOImplementation implements InternDAO {
     @Override
     public InternDTO getByEnrollment(String enrollment) throws DataAccessException {
         String query = "SELECT * FROM practicante WHERE matricula = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, enrollment);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, enrollment);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     InternDTO intern = new InternDTO();
-                    intern.setId(rs.getInt("id_practicante"));
-                    intern.setEnrollment(rs.getString("matricula"));
-                    intern.setName(rs.getString("nombre"));
-                    intern.setPaternalSurname(rs.getString("apellido_paterno"));
-                    intern.setMaternalSurname(rs.getString("apellido_materno"));
-                    intern.setAge(rs.getInt("edad"));
-                    intern.setGender(rs.getString("sexo"));
-                    intern.setIndigenousLanguage(rs.getString("lengua_indigena"));
-                    intern.setUserId(rs.getInt("id_usuario"));
+                    intern.setId(resultSet.getInt("id_practicante"));
+                    intern.setEnrollment(resultSet.getString("matricula"));
+                    intern.setName(resultSet.getString("nombre"));
+                    intern.setPaternalSurname(resultSet.getString("apellido_paterno"));
+                    intern.setMaternalSurname(resultSet.getString("apellido_materno"));
+                    intern.setAge(resultSet.getInt("edad"));
+                    intern.setGender(resultSet.getString("sexo"));
+                    intern.setIndigenousLanguage(resultSet.getString("lengua_indigena"));
+                    intern.setUserId(resultSet.getInt("id_usuario"));
                     return intern;
                 }
             }
@@ -112,20 +112,20 @@ public class InternDAOImplementation implements InternDAO {
     public List<InternDTO> getAll() throws DataAccessException {
         List<InternDTO> interns = new ArrayList<>();
         String query = "SELECT * FROM practicante";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
                 InternDTO intern = new InternDTO();
-                intern.setId(rs.getInt("id_practicante"));
-                intern.setEnrollment(rs.getString("matricula"));
-                intern.setName(rs.getString("nombre"));
-                intern.setPaternalSurname(rs.getString("apellido_paterno"));
-                intern.setMaternalSurname(rs.getString("apellido_materno"));
-                intern.setAge(rs.getInt("edad"));
-                intern.setGender(rs.getString("sexo"));
-                intern.setIndigenousLanguage(rs.getString("lengua_indigena"));
-                intern.setUserId(rs.getInt("id_usuario"));
+                intern.setId(resultSet.getInt("id_practicante"));
+                intern.setEnrollment(resultSet.getString("matricula"));
+                intern.setName(resultSet.getString("nombre"));
+                intern.setPaternalSurname(resultSet.getString("apellido_paterno"));
+                intern.setMaternalSurname(resultSet.getString("apellido_materno"));
+                intern.setAge(resultSet.getInt("edad"));
+                intern.setGender(resultSet.getString("sexo"));
+                intern.setIndigenousLanguage(resultSet.getString("lengua_indigena"));
+                intern.setUserId(resultSet.getInt("id_usuario"));
                 interns.add(intern);
             }
         } catch (SQLException e) {

@@ -27,11 +27,11 @@ public class MessageDAOImplementation implements MessageDAO {
     @Override
     public boolean save(MessageDTO message) throws DataAccessException {
         String query = "INSERT INTO mensaje (asunto, cuerpo) VALUES (?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, message.getSubject());
-            ps.setString(2, message.getBody());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, message.getSubject());
+            preparedStatement.setString(2, message.getBody());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the message.", e);
         }
@@ -47,12 +47,12 @@ public class MessageDAOImplementation implements MessageDAO {
     @Override
     public boolean update(MessageDTO message) throws DataAccessException {
         String query = "UPDATE mensaje SET asunto = ?, cuerpo = ? WHERE id_mensaje = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, message.getSubject());
-            ps.setString(2, message.getBody());
-            ps.setInt(3, message.getId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, message.getSubject());
+            preparedStatement.setString(2, message.getBody());
+            preparedStatement.setInt(3, message.getId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the message.", e);
         }
@@ -68,15 +68,15 @@ public class MessageDAOImplementation implements MessageDAO {
     @Override
     public MessageDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM mensaje WHERE id_mensaje = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     MessageDTO message = new MessageDTO();
-                    message.setId(rs.getInt("id_mensaje"));
-                    message.setSubject(rs.getString("asunto"));
-                    message.setBody(rs.getString("cuerpo"));
+                    message.setId(resultSet.getInt("id_mensaje"));
+                    message.setSubject(resultSet.getString("asunto"));
+                    message.setBody(resultSet.getString("cuerpo"));
                     return message;
                 }
             }
@@ -96,14 +96,14 @@ public class MessageDAOImplementation implements MessageDAO {
     public List<MessageDTO> getAll() throws DataAccessException {
         List<MessageDTO> messages = new ArrayList<>();
         String query = "SELECT * FROM mensaje";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
                 MessageDTO message = new MessageDTO();
-                message.setId(rs.getInt("id_mensaje"));
-                message.setSubject(rs.getString("asunto"));
-                message.setBody(rs.getString("cuerpo"));
+                message.setId(resultSet.getInt("id_mensaje"));
+                message.setSubject(resultSet.getString("asunto"));
+                message.setBody(resultSet.getString("cuerpo"));
                 messages.add(message);
             }
         } catch (SQLException e) {

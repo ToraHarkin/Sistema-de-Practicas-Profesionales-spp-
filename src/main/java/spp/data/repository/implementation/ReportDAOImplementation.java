@@ -27,17 +27,17 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public boolean save(ReportDTO report) throws DataAccessException {
         String query = "INSERT INTO reporte (tipo, fecha_entrega, nrc, periodo_abarca, horas_cubiertas, descripcion, id_practicante, id_periodo_escolar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, report.getType());
-            ps.setTimestamp(2, report.getDeliveryDate());
-            ps.setString(3, report.getNrc());
-            ps.setString(4, report.getCoveredPeriod());
-            ps.setInt(5, report.getCoveredHours());
-            ps.setString(6, report.getDescription());
-            ps.setInt(7, report.getInternId());
-            ps.setInt(8, report.getSchoolPeriodId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, report.getType());
+            preparedStatement.setTimestamp(2, report.getDeliveryDate());
+            preparedStatement.setString(3, report.getNrc());
+            preparedStatement.setString(4, report.getCoveredPeriod());
+            preparedStatement.setInt(5, report.getCoveredHours());
+            preparedStatement.setString(6, report.getDescription());
+            preparedStatement.setInt(7, report.getInternId());
+            preparedStatement.setInt(8, report.getSchoolPeriodId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the report.", e);
         }
@@ -53,18 +53,18 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public boolean update(ReportDTO report) throws DataAccessException {
         String query = "UPDATE reporte SET tipo = ?, fecha_entrega = ?, nrc = ?, periodo_abarca = ?, horas_cubiertas = ?, descripcion = ?, id_practicante = ?, id_periodo_escolar = ? WHERE id_reporte = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, report.getType());
-            ps.setTimestamp(2, report.getDeliveryDate());
-            ps.setString(3, report.getNrc());
-            ps.setString(4, report.getCoveredPeriod());
-            ps.setInt(5, report.getCoveredHours());
-            ps.setString(6, report.getDescription());
-            ps.setInt(7, report.getInternId());
-            ps.setInt(8, report.getSchoolPeriodId());
-            ps.setInt(9, report.getId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, report.getType());
+            preparedStatement.setTimestamp(2, report.getDeliveryDate());
+            preparedStatement.setString(3, report.getNrc());
+            preparedStatement.setString(4, report.getCoveredPeriod());
+            preparedStatement.setInt(5, report.getCoveredHours());
+            preparedStatement.setString(6, report.getDescription());
+            preparedStatement.setInt(7, report.getInternId());
+            preparedStatement.setInt(8, report.getSchoolPeriodId());
+            preparedStatement.setInt(9, report.getId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the report.", e);
         }
@@ -80,10 +80,10 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public boolean delete(int reportId) throws DataAccessException {
         String query = "DELETE FROM reporte WHERE id_reporte = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, reportId);
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, reportId);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error deleting the report.", e);
         }
@@ -99,21 +99,21 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public ReportDTO getById(int reportId) throws DataAccessException {
         String query = "SELECT * FROM reporte WHERE id_reporte = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, reportId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, reportId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     ReportDTO report = new ReportDTO();
-                    report.setId(rs.getInt("id_reporte"));
-                    report.setType(rs.getString("tipo"));
-                    report.setDeliveryDate(rs.getTimestamp("fecha_entrega"));
-                    report.setNrc(rs.getString("nrc"));
-                    report.setCoveredPeriod(rs.getString("periodo_abarca"));
-                    report.setCoveredHours(rs.getInt("horas_cubiertas"));
-                    report.setDescription(rs.getString("descripcion"));
-                    report.setInternId(rs.getInt("id_practicante"));
-                    report.setSchoolPeriodId(rs.getInt("id_periodo_escolar"));
+                    report.setId(resultSet.getInt("id_reporte"));
+                    report.setType(resultSet.getString("tipo"));
+                    report.setDeliveryDate(resultSet.getTimestamp("fecha_entrega"));
+                    report.setNrc(resultSet.getString("nrc"));
+                    report.setCoveredPeriod(resultSet.getString("periodo_abarca"));
+                    report.setCoveredHours(resultSet.getInt("horas_cubiertas"));
+                    report.setDescription(resultSet.getString("descripcion"));
+                    report.setInternId(resultSet.getInt("id_practicante"));
+                    report.setSchoolPeriodId(resultSet.getInt("id_periodo_escolar"));
                     return report;
                 }
             }
@@ -134,21 +134,21 @@ public class ReportDAOImplementation implements ReportDAO {
     public List<ReportDTO> getByInternId(int internId) throws DataAccessException {
         List<ReportDTO> reports = new ArrayList<>();
         String query = "SELECT * FROM reporte WHERE id_practicante = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, internId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, internId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
                     ReportDTO report = new ReportDTO();
-                    report.setId(rs.getInt("id_reporte"));
-                    report.setType(rs.getString("tipo"));
-                    report.setDeliveryDate(rs.getTimestamp("fecha_entrega"));
-                    report.setNrc(rs.getString("nrc"));
-                    report.setCoveredPeriod(rs.getString("periodo_abarca"));
-                    report.setCoveredHours(rs.getInt("horas_cubiertas"));
-                    report.setDescription(rs.getString("descripcion"));
-                    report.setInternId(rs.getInt("id_practicante"));
-                    report.setSchoolPeriodId(rs.getInt("id_periodo_escolar"));
+                    report.setId(resultSet.getInt("id_reporte"));
+                    report.setType(resultSet.getString("tipo"));
+                    report.setDeliveryDate(resultSet.getTimestamp("fecha_entrega"));
+                    report.setNrc(resultSet.getString("nrc"));
+                    report.setCoveredPeriod(resultSet.getString("periodo_abarca"));
+                    report.setCoveredHours(resultSet.getInt("horas_cubiertas"));
+                    report.setDescription(resultSet.getString("descripcion"));
+                    report.setInternId(resultSet.getInt("id_practicante"));
+                    report.setSchoolPeriodId(resultSet.getInt("id_periodo_escolar"));
                     reports.add(report);
                 }
             }

@@ -27,13 +27,13 @@ public class ActivityDAOImplementation implements ActivityDAO {
     @Override
     public boolean save(ActivityDTO activity) throws DataAccessException {
         String query = "INSERT INTO actividad (titulo, fecha_limite, descripcion, id_profesor) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, activity.getTitle());
-            ps.setTimestamp(2, activity.getDeadline());
-            ps.setString(3, activity.getDescription());
-            ps.setInt(4, activity.getProfessorId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, activity.getTitle());
+            preparedStatement.setTimestamp(2, activity.getDeadline());
+            preparedStatement.setString(3, activity.getDescription());
+            preparedStatement.setInt(4, activity.getProfessorId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the activity.", e);
         }
@@ -49,14 +49,14 @@ public class ActivityDAOImplementation implements ActivityDAO {
     @Override
     public boolean update(ActivityDTO activity) throws DataAccessException {
         String query = "UPDATE actividad SET titulo = ?, fecha_limite = ?, descripcion = ?, id_profesor = ? WHERE id_actividad = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, activity.getTitle());
-            ps.setTimestamp(2, activity.getDeadline());
-            ps.setString(3, activity.getDescription());
-            ps.setInt(4, activity.getProfessorId());
-            ps.setInt(5, activity.getId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, activity.getTitle());
+            preparedStatement.setTimestamp(2, activity.getDeadline());
+            preparedStatement.setString(3, activity.getDescription());
+            preparedStatement.setInt(4, activity.getProfessorId());
+            preparedStatement.setInt(5, activity.getId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the activity.", e);
         }
@@ -72,17 +72,17 @@ public class ActivityDAOImplementation implements ActivityDAO {
     @Override
     public ActivityDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM actividad WHERE id_actividad = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
                     ActivityDTO activity = new ActivityDTO();
-                    activity.setId(rs.getInt("id_actividad"));
-                    activity.setTitle(rs.getString("titulo"));
-                    activity.setDeadline(rs.getTimestamp("fecha_limite"));
-                    activity.setDescription(rs.getString("descripcion"));
-                    activity.setProfessorId(rs.getInt("id_profesor"));
+                    activity.setId(resultSet.getInt("id_actividad"));
+                    activity.setTitle(resultSet.getString("titulo"));
+                    activity.setDeadline(resultSet.getTimestamp("fecha_limite"));
+                    activity.setDescription(resultSet.getString("descripcion"));
+                    activity.setProfessorId(resultSet.getInt("id_profesor"));
                     return activity;
                 }
             }
@@ -103,17 +103,17 @@ public class ActivityDAOImplementation implements ActivityDAO {
     public List<ActivityDTO> getByProfessorId(int professorId) throws DataAccessException {
         List<ActivityDTO> activities = new ArrayList<>();
         String query = "SELECT * FROM actividad WHERE id_profesor = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, professorId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, professorId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
                     ActivityDTO activity = new ActivityDTO();
-                    activity.setId(rs.getInt("id_actividad"));
-                    activity.setTitle(rs.getString("titulo"));
-                    activity.setDeadline(rs.getTimestamp("fecha_limite"));
-                    activity.setDescription(rs.getString("descripcion"));
-                    activity.setProfessorId(rs.getInt("id_profesor"));
+                    activity.setId(resultSet.getInt("id_actividad"));
+                    activity.setTitle(resultSet.getString("titulo"));
+                    activity.setDeadline(resultSet.getTimestamp("fecha_limite"));
+                    activity.setDescription(resultSet.getString("descripcion"));
+                    activity.setProfessorId(resultSet.getInt("id_profesor"));
                     activities.add(activity);
                 }
             }

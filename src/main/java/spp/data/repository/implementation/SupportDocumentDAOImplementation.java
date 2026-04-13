@@ -26,16 +26,16 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
     @Override
     public boolean save(SupportDocumentDTO document) throws DataAccessException {
         String query = "INSERT INTO documento_soporte (tipo, ruta_archivo, extension, tamaño, fecha, id_practicante, id_profesor) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, document.getType());
-            ps.setString(2, document.getFilePath());
-            ps.setString(3, document.getExtension());
-            ps.setLong(4, document.getSize());
-            ps.setTimestamp(5, document.getDate());
-            ps.setInt(6, document.getInternId());
-            ps.setInt(7, document.getProfessorId());
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, document.getType());
+            preparedStatement.setString(2, document.getFilePath());
+            preparedStatement.setString(3, document.getExtension());
+            preparedStatement.setLong(4, document.getSize());
+            preparedStatement.setTimestamp(5, document.getDate());
+            preparedStatement.setInt(6, document.getInternId());
+            preparedStatement.setInt(7, document.getProfessorId());
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error saving the support document.", e);
         }
@@ -53,12 +53,12 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
     @Override
     public boolean updateGrade(int documentId, double grade, String observations) throws DataAccessException {
         String query = "UPDATE documento_soporte SET calificacion = ?, observaciones = ? WHERE id_documento_soporte = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setDouble(1, grade);
-            ps.setString(2, observations);
-            ps.setInt(3, documentId);
-            return ps.executeUpdate() > 0;
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDouble(1, grade);
+            preparedStatement.setString(2, observations);
+            preparedStatement.setInt(3, documentId);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataAccessException("Error updating the document grade.", e);
         }
@@ -75,22 +75,22 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
     public List<SupportDocumentDTO> getByInternId(int internId) throws DataAccessException {
         List<SupportDocumentDTO> documents = new ArrayList<>();
         String query = "SELECT * FROM documento_soporte WHERE id_practicante = ?";
-        try (Connection conn = ConnectionPool.getInstanceConectionPool().getConnectionPool();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, internId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, internId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
                     SupportDocumentDTO doc = new SupportDocumentDTO();
-                    doc.setId(rs.getInt("id_documento_soporte"));
-                    doc.setType(rs.getString("tipo"));
-                    doc.setFilePath(rs.getString("ruta_archivo"));
-                    doc.setExtension(rs.getString("extension"));
-                    doc.setSize(rs.getLong("tamaño"));
-                    doc.setDate(rs.getTimestamp("fecha"));
-                    doc.setGrade(rs.getDouble("calificacion"));
-                    doc.setObservations(rs.getString("observaciones"));
-                    doc.setInternId(rs.getInt("id_practicante"));
-                    doc.setProfessorId(rs.getInt("id_profesor"));
+                    doc.setId(resultSet.getInt("id_documento_soporte"));
+                    doc.setType(resultSet.getString("tipo"));
+                    doc.setFilePath(resultSet.getString("ruta_archivo"));
+                    doc.setExtension(resultSet.getString("extension"));
+                    doc.setSize(resultSet.getLong("tamaño"));
+                    doc.setDate(resultSet.getTimestamp("fecha"));
+                    doc.setGrade(resultSet.getDouble("calificacion"));
+                    doc.setObservations(resultSet.getString("observaciones"));
+                    doc.setInternId(resultSet.getInt("id_practicante"));
+                    doc.setProfessorId(resultSet.getInt("id_profesor"));
                     documents.add(doc);
                 }
             }
