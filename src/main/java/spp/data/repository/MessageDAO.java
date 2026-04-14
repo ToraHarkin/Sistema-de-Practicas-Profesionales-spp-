@@ -1,7 +1,11 @@
 package spp.data.repository;
+
+
 import spp.domain.dto.MessageDTO;
 import spp.data.exception.DataAccessException;
 import java.util.List;
+
+
 
 public interface MessageDAO {
     boolean save(MessageDTO message) throws DataAccessException;

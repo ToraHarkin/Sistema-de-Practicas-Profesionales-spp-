@@ -36,7 +36,7 @@ public class App extends Application {
         
         // Nueva Prueba de conexión a la Base de Datos MySQL usando el Pool de Ángel
         try {
-            spp.data.connection.ConnectionPool.getInstanceConectionPool().getConnectionPool();
+            spp.data.connection.ConnectionPool.getInstanceConectionPool().getConnection();
             System.out.println("INFO: ¡Conexión exitosa a la base de datos usando DBCP2!");
         } catch (SQLException e) {
             System.out.println("ERROR FATAL: No se pudo conectar a la base de datos.");

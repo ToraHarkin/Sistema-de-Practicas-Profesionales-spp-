@@ -1,8 +1,10 @@
 package spp.data.repository;
 
+
 import spp.domain.dto.ReportDTO;
 import spp.data.exception.DataAccessException;
 import java.util.List;
+
 
 public interface ReportDAO {
     boolean save(ReportDTO report) throws DataAccessException;

@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ShiftDAO;
 import spp.domain.dto.ShiftDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for the academic shifts catalog.
@@ -27,11 +30,11 @@ public class ShiftDAOImplementation implements ShiftDAO {
     @Override
     public boolean save(ShiftDTO shift) throws DataAccessException {
         String query = "INSERT INTO turno (nombre) VALUES (?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, shift.getName());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the shift.", e);
         }
     }
@@ -46,12 +49,12 @@ public class ShiftDAOImplementation implements ShiftDAO {
     @Override
     public boolean update(ShiftDTO shift) throws DataAccessException {
         String query = "UPDATE turno SET nombre = ? WHERE id_turno = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, shift.getName());
             preparedStatement.setInt(2, shift.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the shift.", e);
         }
     }
@@ -66,7 +69,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
     @Override
     public ShiftDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM turno WHERE id_turno = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -77,7 +80,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
                     return shift;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the shift.", e);
         }
         return null;
@@ -93,7 +96,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
     public List<ShiftDTO> getAll() throws DataAccessException {
         List<ShiftDTO> shifts = new ArrayList<>();
         String query = "SELECT * FROM turno";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -102,7 +105,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
                 shift.setName(resultSet.getString("nombre"));
                 shifts.add(shift);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving shifts.", e);
         }
         return shifts;

@@ -1,8 +1,10 @@
 package spp.data.repository;
 
+
 import spp.domain.dto.ProjectDTO;
 import spp.data.exception.DataAccessException;
 import java.util.List;
+
 
 public interface ProjectDAO {
     boolean save(ProjectDTO project) throws DataAccessException;

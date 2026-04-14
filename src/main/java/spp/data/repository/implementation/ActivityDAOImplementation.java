@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ActivityDAO;
 import spp.domain.dto.ActivityDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing activities created by professors.
@@ -27,14 +30,14 @@ public class ActivityDAOImplementation implements ActivityDAO {
     @Override
     public boolean save(ActivityDTO activity) throws DataAccessException {
         String query = "INSERT INTO actividad (titulo, fecha_limite, descripcion, id_profesor) VALUES (?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, activity.getTitle());
             preparedStatement.setTimestamp(2, activity.getDeadline());
             preparedStatement.setString(3, activity.getDescription());
             preparedStatement.setInt(4, activity.getProfessorId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the activity.", e);
         }
     }
@@ -49,7 +52,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
     @Override
     public boolean update(ActivityDTO activity) throws DataAccessException {
         String query = "UPDATE actividad SET titulo = ?, fecha_limite = ?, descripcion = ?, id_profesor = ? WHERE id_actividad = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, activity.getTitle());
             preparedStatement.setTimestamp(2, activity.getDeadline());
@@ -57,7 +60,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
             preparedStatement.setInt(4, activity.getProfessorId());
             preparedStatement.setInt(5, activity.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the activity.", e);
         }
     }
@@ -72,7 +75,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
     @Override
     public ActivityDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM actividad WHERE id_actividad = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -86,7 +89,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
                     return activity;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the activity.", e);
         }
         return null;
@@ -103,7 +106,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
     public List<ActivityDTO> getByProfessorId(int professorId) throws DataAccessException {
         List<ActivityDTO> activities = new ArrayList<>();
         String query = "SELECT * FROM actividad WHERE id_profesor = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, professorId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -117,7 +120,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
                     activities.add(activity);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving activities by professor.", e);
         }
         return activities;

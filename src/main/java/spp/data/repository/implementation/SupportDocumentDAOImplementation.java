@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.SupportDocumentDAO;
 import spp.domain.dto.SupportDocumentDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing file metadata and grading.
@@ -26,7 +29,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
     @Override
     public boolean save(SupportDocumentDTO document) throws DataAccessException {
         String query = "INSERT INTO documento_soporte (tipo, ruta_archivo, extension, tamaño, fecha, id_practicante, id_profesor) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, document.getType());
             preparedStatement.setString(2, document.getFilePath());
@@ -36,7 +39,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
             preparedStatement.setInt(6, document.getInternId());
             preparedStatement.setInt(7, document.getProfessorId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the support document.", e);
         }
     }
@@ -53,13 +56,13 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
     @Override
     public boolean updateGrade(int documentId, double grade, String observations) throws DataAccessException {
         String query = "UPDATE documento_soporte SET calificacion = ?, observaciones = ? WHERE id_documento_soporte = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setDouble(1, grade);
             preparedStatement.setString(2, observations);
             preparedStatement.setInt(3, documentId);
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the document grade.", e);
         }
     }
@@ -75,7 +78,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
     public List<SupportDocumentDTO> getByInternId(int internId) throws DataAccessException {
         List<SupportDocumentDTO> documents = new ArrayList<>();
         String query = "SELECT * FROM documento_soporte WHERE id_practicante = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, internId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -94,7 +97,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
                     documents.add(doc);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException  | ConfigurationException e) {
             throw new DataAccessException("Error retrieving support documents.", e);
         }
         return documents;

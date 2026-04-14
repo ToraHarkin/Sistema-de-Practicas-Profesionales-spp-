@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ReportDAO;
 import spp.domain.dto.ReportDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing intern activity reports.
@@ -27,7 +30,7 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public boolean save(ReportDTO report) throws DataAccessException {
         String query = "INSERT INTO reporte (tipo, fecha_entrega, nrc, periodo_abarca, horas_cubiertas, descripcion, id_practicante, id_periodo_escolar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, report.getType());
             preparedStatement.setTimestamp(2, report.getDeliveryDate());
@@ -38,7 +41,7 @@ public class ReportDAOImplementation implements ReportDAO {
             preparedStatement.setInt(7, report.getInternId());
             preparedStatement.setInt(8, report.getSchoolPeriodId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the report.", e);
         }
     }
@@ -53,7 +56,7 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public boolean update(ReportDTO report) throws DataAccessException {
         String query = "UPDATE reporte SET tipo = ?, fecha_entrega = ?, nrc = ?, periodo_abarca = ?, horas_cubiertas = ?, descripcion = ?, id_practicante = ?, id_periodo_escolar = ? WHERE id_reporte = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, report.getType());
             preparedStatement.setTimestamp(2, report.getDeliveryDate());
@@ -65,7 +68,7 @@ public class ReportDAOImplementation implements ReportDAO {
             preparedStatement.setInt(8, report.getSchoolPeriodId());
             preparedStatement.setInt(9, report.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the report.", e);
         }
     }
@@ -80,11 +83,11 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public boolean delete(int reportId) throws DataAccessException {
         String query = "DELETE FROM reporte WHERE id_reporte = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, reportId);
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error deleting the report.", e);
         }
     }
@@ -99,7 +102,7 @@ public class ReportDAOImplementation implements ReportDAO {
     @Override
     public ReportDTO getById(int reportId) throws DataAccessException {
         String query = "SELECT * FROM reporte WHERE id_reporte = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, reportId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -117,7 +120,7 @@ public class ReportDAOImplementation implements ReportDAO {
                     return report;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the report.", e);
         }
         return null;
@@ -134,7 +137,7 @@ public class ReportDAOImplementation implements ReportDAO {
     public List<ReportDTO> getByInternId(int internId) throws DataAccessException {
         List<ReportDTO> reports = new ArrayList<>();
         String query = "SELECT * FROM reporte WHERE id_practicante = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, internId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -152,7 +155,7 @@ public class ReportDAOImplementation implements ReportDAO {
                     reports.add(report);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving reports by intern.", e);
         }
         return reports;

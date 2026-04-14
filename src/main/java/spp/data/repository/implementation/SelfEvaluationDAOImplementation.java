@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.SelfEvaluationDAO;
 import spp.domain.dto.SelfEvaluationDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing intern self-evaluations.
@@ -27,12 +30,12 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
     @Override
     public boolean save(SelfEvaluationDTO evaluation) throws DataAccessException {
         String query = "INSERT INTO autoevaluacion (fecha_registro, id_practicante) VALUES (?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setTimestamp(1, evaluation.getRegistrationDate());
             preparedStatement.setInt(2, evaluation.getInternId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the self evaluation.", e);
         }
     }
@@ -47,13 +50,13 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
     @Override
     public boolean update(SelfEvaluationDTO evaluation) throws DataAccessException {
         String query = "UPDATE autoevaluacion SET fecha_registro = ?, id_practicante = ? WHERE id_autoevaluacion = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setTimestamp(1, evaluation.getRegistrationDate());
             preparedStatement.setInt(2, evaluation.getInternId());
             preparedStatement.setInt(3, evaluation.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the self evaluation.", e);
         }
     }
@@ -68,7 +71,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
     @Override
     public SelfEvaluationDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM autoevaluacion WHERE id_autoevaluacion = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -80,7 +83,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
                     return eval;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the self evaluation.", e);
         }
         return null;
@@ -97,7 +100,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
     public List<SelfEvaluationDTO> getByInternId(int internId) throws DataAccessException {
         List<SelfEvaluationDTO> evaluations = new ArrayList<>();
         String query = "SELECT * FROM autoevaluacion WHERE id_practicante = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, internId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -109,7 +112,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
                     evaluations.add(eval);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving self evaluations by intern.", e);
         }
         return evaluations;

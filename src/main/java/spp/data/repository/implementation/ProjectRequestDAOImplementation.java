@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ProjectRequestDAO;
 import spp.domain.dto.ProjectRequestDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing intern project selections.
@@ -26,13 +29,13 @@ public class ProjectRequestDAOImplementation implements ProjectRequestDAO {
     @Override
     public boolean save(ProjectRequestDTO request) throws DataAccessException {
         String query = "INSERT INTO solicitud_proyecto (prioridad, id_practicante, id_proyecto) VALUES (?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, request.getPriority());
             preparedStatement.setInt(2, request.getInternId());
             preparedStatement.setInt(3, request.getProjectId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the project request.", e);
         }
     }
@@ -47,11 +50,11 @@ public class ProjectRequestDAOImplementation implements ProjectRequestDAO {
     @Override
     public boolean delete(int requestId) throws DataAccessException {
         String query = "DELETE FROM solicitud_proyecto WHERE id_solicitud_proyecto = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, requestId);
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error deleting the project request.", e);
         }
     }
@@ -67,7 +70,7 @@ public class ProjectRequestDAOImplementation implements ProjectRequestDAO {
     public List<ProjectRequestDTO> getByInternId(int internId) throws DataAccessException {
         List<ProjectRequestDTO> requests = new ArrayList<>();
         String query = "SELECT * FROM solicitud_proyecto WHERE id_practicante = ? ORDER BY prioridad ASC";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, internId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -80,7 +83,7 @@ public class ProjectRequestDAOImplementation implements ProjectRequestDAO {
                     requests.add(request);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving project requests.", e);
         }
         return requests;

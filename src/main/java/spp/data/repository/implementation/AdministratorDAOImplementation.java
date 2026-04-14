@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.AdministratorDAO;
 import spp.domain.dto.AdministratorDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing system administrators.
@@ -27,12 +30,12 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
     @Override
     public boolean save(AdministratorDTO admin) throws DataAccessException {
         String query = "INSERT INTO administrador (cuenta_usuario, id_usuario) VALUES (?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, admin.getUserAccount());
             preparedStatement.setInt(2, admin.getUserId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the administrator.", e);
         }
     }
@@ -47,13 +50,13 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
     @Override
     public boolean update(AdministratorDTO admin) throws DataAccessException {
         String query = "UPDATE administrador SET cuenta_usuario = ?, id_usuario = ? WHERE id_administrador = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, admin.getUserAccount());
             preparedStatement.setInt(2, admin.getUserId());
             preparedStatement.setInt(3, admin.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the administrator.", e);
         }
     }
@@ -68,7 +71,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
     @Override
     public AdministratorDTO getByUserAccount(String userAccount) throws DataAccessException {
         String query = "SELECT * FROM administrador WHERE cuenta_usuario = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, userAccount);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -80,7 +83,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
                     return admin;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the administrator.", e);
         }
         return null;
@@ -96,7 +99,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
     public List<AdministratorDTO> getAll() throws DataAccessException {
         List<AdministratorDTO> admins = new ArrayList<>();
         String query = "SELECT * FROM administrador";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -106,7 +109,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
                 admin.setUserId(resultSet.getInt("id_usuario"));
                 admins.add(admin);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the administrators.", e);
         }
         return admins;

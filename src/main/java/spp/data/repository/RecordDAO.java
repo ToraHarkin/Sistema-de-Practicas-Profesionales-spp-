@@ -1,6 +1,9 @@
 package spp.data.repository;
+
+
 import spp.domain.dto.RecordDTO;
 import spp.data.exception.DataAccessException;
+
 
 public interface RecordDAO {
     boolean save(RecordDTO record) throws DataAccessException;

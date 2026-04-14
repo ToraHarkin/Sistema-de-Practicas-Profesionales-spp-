@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ProfessorDAO;
 import spp.domain.dto.ProfessorDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation of the ProfessorDAO interface.
@@ -27,7 +30,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
     @Override
     public boolean save(ProfessorDTO professor) throws DataAccessException {
         String query = "INSERT INTO profesor (numero_personal, nombre, apellido_paterno, apellido_materno, tiempo_servicio_meses, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, professor.getPersonalNumber());
             preparedStatement.setString(2, professor.getName());
@@ -36,7 +39,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
             preparedStatement.setInt(5, professor.getMonthsOfService());
             preparedStatement.setInt(6, professor.getUserId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the professor.", e);
         }
     }
@@ -51,7 +54,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
     @Override
     public boolean update(ProfessorDTO professor) throws DataAccessException {
         String query = "UPDATE profesor SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, tiempo_servicio_meses = ? WHERE numero_personal = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, professor.getName());
             preparedStatement.setString(2, professor.getPaternalSurname());
@@ -59,7 +62,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
             preparedStatement.setInt(4, professor.getMonthsOfService());
             preparedStatement.setString(5, professor.getPersonalNumber());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the professor.", e);
         }
     }
@@ -74,7 +77,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
     @Override
     public ProfessorDTO getByPersonalNumber(String personalNumber) throws DataAccessException {
         String query = "SELECT * FROM profesor WHERE numero_personal = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, personalNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -90,7 +93,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
                     return prof;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the professor.", e);
         }
         return null;
@@ -106,7 +109,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
     public List<ProfessorDTO> getAll() throws DataAccessException {
         List<ProfessorDTO> professors = new ArrayList<>();
         String query = "SELECT * FROM profesor";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -120,7 +123,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
                 prof.setUserId(resultSet.getInt("id_usuario"));
                 professors.add(prof);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the list of professors.", e);
         }
         return professors;

@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.LinkedOrganizationDAO;
 import spp.domain.dto.LinkedOrganizationDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation of the LinkedOrganizationDAO interface.
@@ -27,14 +30,14 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     @Override
     public boolean save(LinkedOrganizationDTO organization) throws DataAccessException {
         String query = "INSERT INTO organizacion_vinculada (nombre, telefono, correo_electronico, sector) VALUES (?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, organization.getName());
             preparedStatement.setString(2, organization.getPhone());
             preparedStatement.setString(3, organization.getEmail());
             preparedStatement.setString(4, organization.getSector());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the linked organization.", e);
         }
     }
@@ -49,7 +52,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     @Override
     public boolean update(LinkedOrganizationDTO organization) throws DataAccessException {
         String query = "UPDATE organizacion_vinculada SET nombre = ?, telefono = ?, correo_electronico = ?, sector = ? WHERE id_organizacion_vinculada = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, organization.getName());
             preparedStatement.setString(2, organization.getPhone());
@@ -57,7 +60,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
             preparedStatement.setString(4, organization.getSector());
             preparedStatement.setInt(5, organization.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the linked organization.", e);
         }
     }
@@ -72,7 +75,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     @Override
     public LinkedOrganizationDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM organizacion_vinculada WHERE id_organizacion_vinculada = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -86,7 +89,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
                     return org;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the linked organization.", e);
         }
         return null;
@@ -102,7 +105,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
     public List<LinkedOrganizationDTO> getAll() throws DataAccessException {
         List<LinkedOrganizationDTO> organizations = new ArrayList<>();
         String query = "SELECT * FROM organizacion_vinculada";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -114,7 +117,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
                 org.setSector(resultSet.getString("sector"));
                 organizations.add(org);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the list of linked organizations.", e);
         }
         return organizations;

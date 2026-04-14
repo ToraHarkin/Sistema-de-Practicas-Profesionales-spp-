@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.CoordinatorDAO;
 import spp.domain.dto.CoordinatorDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing system coordinators.
@@ -26,7 +29,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
     @Override
     public boolean save(CoordinatorDTO coordinator) throws DataAccessException {
         String query = "INSERT INTO coordinador (numero_personal, nombre, apellido_paterno, apellido_materno, tiempo_servicio_meses, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, coordinator.getPersonalNumber());
             preparedStatement.setString(2, coordinator.getName());
@@ -35,7 +38,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
             preparedStatement.setInt(5, coordinator.getMonthsOfService());
             preparedStatement.setInt(6, coordinator.getUserId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the coordinator.", e);
         }
     }
@@ -50,7 +53,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
     @Override
     public boolean update(CoordinatorDTO coordinator) throws DataAccessException {
         String query = "UPDATE coordinador SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, tiempo_servicio_meses = ? WHERE numero_personal = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, coordinator.getName());
             preparedStatement.setString(2, coordinator.getPaternalSurname());
@@ -58,7 +61,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
             preparedStatement.setInt(4, coordinator.getMonthsOfService());
             preparedStatement.setString(5, coordinator.getPersonalNumber());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the coordinator.", e);
         }
     }
@@ -73,7 +76,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
     @Override
     public CoordinatorDTO getByPersonalNumber(String personalNumber) throws DataAccessException {
         String query = "SELECT * FROM coordinador WHERE numero_personal = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, personalNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -89,7 +92,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
                     return coordinator;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the coordinator.", e);
         }
         return null;
@@ -105,7 +108,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
     public List<CoordinatorDTO> getAll() throws DataAccessException {
         List<CoordinatorDTO> coordinators = new ArrayList<>();
         String query = "SELECT * FROM coordinador";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -119,7 +122,7 @@ public class CoordinatorDAOImplementation implements CoordinatorDAO {
                 coordinator.setUserId(resultSet.getInt("id_usuario"));
                 coordinators.add(coordinator);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving coordinators.", e);
         }
         return coordinators;

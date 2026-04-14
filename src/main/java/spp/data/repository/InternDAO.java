@@ -1,8 +1,10 @@
 package spp.data.repository;
 
+
 import spp.domain.dto.InternDTO;
 import spp.data.exception.DataAccessException;
 import java.util.List;
+
 
 public interface InternDAO {
     boolean save(InternDTO intern) throws DataAccessException;

@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ProjectDAO;
 import spp.domain.dto.ProjectDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation of the ProjectDAO interface responsible for the lifecycle of linked projects.
@@ -26,7 +29,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
     @Override
     public boolean save(ProjectDTO project) throws DataAccessException {
         String query = "INSERT INTO proyecto (nombre, capacidad_practicantes, disponibilidad, descripcion, id_organizacion_vinculada) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, project.getName());
             preparedStatement.setInt(2, project.getCapacity());
@@ -34,7 +37,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
             preparedStatement.setString(4, project.getDescription());
             preparedStatement.setInt(5, project.getLinkedOrganizationId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error attempting to register the new project.", e);
         }
     }
@@ -49,7 +52,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
     @Override
     public boolean update(ProjectDTO project) throws DataAccessException {
         String query = "UPDATE proyecto SET nombre = ?, capacidad_practicantes = ?, disponibilidad = ?, descripcion = ? WHERE id_proyecto = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, project.getName());
             preparedStatement.setInt(2, project.getCapacity());
@@ -57,7 +60,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
             preparedStatement.setString(4, project.getDescription());
             preparedStatement.setInt(5, project.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error attempting to modify the project details.", e);
         }
     }
@@ -72,7 +75,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
     @Override
     public ProjectDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM proyecto WHERE id_proyecto = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -87,7 +90,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
                     return project;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the requested project information.", e);
         }
         return null;
@@ -103,7 +106,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
     public List<ProjectDTO> getAllAvailable() throws DataAccessException {
         List<ProjectDTO> projects = new ArrayList<>();
         String query = "SELECT * FROM proyecto WHERE disponibilidad = 1";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -116,7 +119,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
                 project.setLinkedOrganizationId(resultSet.getInt("id_organizacion_vinculada"));
                 projects.add(project);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error compiling the list of available projects.", e);
         }
         return projects;

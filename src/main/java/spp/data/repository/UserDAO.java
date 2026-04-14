@@ -1,7 +1,9 @@
 package spp.data.repository;
 
+
 import spp.domain.dto.UserDTO;
 import spp.data.exception.DataAccessException;
+
 
 public interface UserDAO {
     boolean save(UserDTO user) throws DataAccessException;

@@ -1,8 +1,10 @@
 package spp.data.repository;
 
+
 import spp.domain.dto.SchoolPeriodDTO;
 import spp.data.exception.DataAccessException;
 import java.util.List;
+
 
 public interface SchoolPeriodDAO {
     boolean save(SchoolPeriodDTO period) throws DataAccessException;

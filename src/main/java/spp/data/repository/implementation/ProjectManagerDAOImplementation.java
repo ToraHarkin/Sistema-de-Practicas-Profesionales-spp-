@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.ProjectManagerDAO;
 import spp.domain.dto.ProjectManagerDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing the external contacts responsible for a project.
@@ -26,7 +29,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
     @Override
     public boolean save(ProjectManagerDTO manager) throws DataAccessException {
         String query = "INSERT INTO responsable_proyecto (nombre, apellido_paterno, apellido_materno, cargo, telefono, correo_electronico, id_proyecto) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, manager.getName());
             preparedStatement.setString(2, manager.getPaternalSurname());
@@ -36,7 +39,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
             preparedStatement.setString(6, manager.getEmail());
             preparedStatement.setInt(7, manager.getProjectId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the project manager.", e);
         }
     }
@@ -51,7 +54,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
     @Override
     public boolean update(ProjectManagerDTO manager) throws DataAccessException {
         String query = "UPDATE responsable_proyecto SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, cargo = ?, telefono = ?, correo_electronico = ? WHERE id_responsable_proyecto = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, manager.getName());
             preparedStatement.setString(2, manager.getPaternalSurname());
@@ -61,7 +64,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
             preparedStatement.setString(6, manager.getEmail());
             preparedStatement.setInt(7, manager.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the project manager.", e);
         }
     }
@@ -77,7 +80,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
     public List<ProjectManagerDTO> getByProjectId(int projectId) throws DataAccessException {
         List<ProjectManagerDTO> managers = new ArrayList<>();
         String query = "SELECT * FROM responsable_proyecto WHERE id_proyecto = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, projectId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -94,7 +97,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
                     managers.add(manager);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving project managers.", e);
         }
         return managers;

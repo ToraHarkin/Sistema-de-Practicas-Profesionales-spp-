@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.InternDAO;
 import spp.domain.dto.InternDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation of the InternDAO interface for intern persistence.
@@ -27,7 +30,7 @@ public class InternDAOImplementation implements InternDAO {
     @Override
     public boolean save(InternDTO intern) throws DataAccessException {
         String query = "INSERT INTO practicante (matricula, nombre, apellido_paterno, apellido_materno, edad, sexo, lengua_indigena, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, intern.getEnrollment());
             preparedStatement.setString(2, intern.getName());
@@ -38,7 +41,7 @@ public class InternDAOImplementation implements InternDAO {
             preparedStatement.setString(7, intern.getIndigenousLanguage());
             preparedStatement.setInt(8, intern.getUserId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the intern to the database.", e);
         }
     }
@@ -53,7 +56,7 @@ public class InternDAOImplementation implements InternDAO {
     @Override
     public boolean update(InternDTO intern) throws DataAccessException {
         String query = "UPDATE practicante SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, edad = ?, sexo = ?, lengua_indigena = ? WHERE matricula = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, intern.getName());
             preparedStatement.setString(2, intern.getPaternalSurname());
@@ -63,7 +66,7 @@ public class InternDAOImplementation implements InternDAO {
             preparedStatement.setString(6, intern.getIndigenousLanguage());
             preparedStatement.setString(7, intern.getEnrollment());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error updating the intern's information.", e);
         }
     }
@@ -78,7 +81,7 @@ public class InternDAOImplementation implements InternDAO {
     @Override
     public InternDTO getByEnrollment(String enrollment) throws DataAccessException {
         String query = "SELECT * FROM practicante WHERE matricula = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, enrollment);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -96,7 +99,7 @@ public class InternDAOImplementation implements InternDAO {
                     return intern;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error querying the intern by enrollment.", e);
         }
         return null;
@@ -112,7 +115,7 @@ public class InternDAOImplementation implements InternDAO {
     public List<InternDTO> getAll() throws DataAccessException {
         List<InternDTO> interns = new ArrayList<>();
         String query = "SELECT * FROM practicante";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -128,7 +131,7 @@ public class InternDAOImplementation implements InternDAO {
                 intern.setUserId(resultSet.getInt("id_usuario"));
                 interns.add(intern);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error querying the general intern catalog.", e);
         }
         return interns;

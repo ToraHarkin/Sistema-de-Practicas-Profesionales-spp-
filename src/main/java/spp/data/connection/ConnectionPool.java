@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.time.Duration;
+import spp.data.exception.ConfigurationException;
 
 /**
  * Implementing a JDBC connection pool using Apache DBCP2's, apply the Singleton
@@ -24,7 +25,7 @@ public class ConnectionPool {
      * @throw SQLEception if an error occurs while loading the configuration
      * or if the properties are invalid 
      */   
-    private ConnectionPool() throws SQLException {
+    private ConnectionPool() throws SQLException, ConfigurationException {
         
         Properties properties = loadProperties();
         validateProperties(properties);
@@ -48,7 +49,7 @@ public class ConnectionPool {
      * @return single instance of ConnectionPool
      * @throws SQLException if an error occurs while initializing the pool
      */
-    public static ConnectionPool getInstanceConectionPool() throws SQLException {
+    public static ConnectionPool getInstanceConectionPool() throws SQLException, ConfigurationException{
         
         if (singleInstancePool == null) {
             singleInstancePool = new ConnectionPool();
@@ -60,7 +61,7 @@ public class ConnectionPool {
      * @return active connection to the database
      * @throws SQLException if connection cannot be established
      */
-    public Connection getConnectionPool() throws SQLException {
+    public Connection getConnection() throws SQLException {
         
         return basicDataSource.getConnection(); 
     }
@@ -70,7 +71,7 @@ public class ConnectionPool {
      * @return object Properties with the loaded configuration (db.properties)
      * @throws SQLException if the file is not found or cannot be read
      */
-    private Properties loadProperties() throws SQLException {
+    private Properties loadProperties() throws ConfigurationException {
         
         Properties properties = new Properties();
         try(InputStream input = getClass()
@@ -78,13 +79,13 @@ public class ConnectionPool {
                 .getResourceAsStream("db.properties")) {
             
             if (input == null) {     
-                throw new SQLException("No se encontró db.properties en resources"); 
+                throw new ConfigurationException("No se encontró db.properties en resources"); 
             }
             
             properties.load(input);
             
         } catch(IOException e) {
-            throw new SQLException("Error al cargar db.properties", e);
+            throw new ConfigurationException("Error al cargar db.properties", e);
         }
         
         return properties;
@@ -95,7 +96,7 @@ public class ConnectionPool {
      * @param properties properties charged
      * @throws SQLException if any required property is missing
      */
-    private void validateProperties(Properties properties) throws SQLException {
+    private void validateProperties(Properties properties) throws ConfigurationException {
         
         String[] required = {
             "db.driver",
@@ -110,7 +111,7 @@ public class ConnectionPool {
         
         for (String key : required) { 
             if (properties.getProperty(key) == null) {
-                throw new SQLException("Falta propiedad requerida: " + key);
+                throw new ConfigurationException("Falta propiedad requerida: " + key);
             } 
         }
     }

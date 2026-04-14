@@ -1,5 +1,6 @@
 package spp.data.repository.implementation;
 
+
 import spp.data.repository.SchoolPeriodDAO;
 import spp.domain.dto.SchoolPeriodDTO;
 import spp.data.exception.DataAccessException;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import spp.data.exception.ConfigurationException;
+
 
 /**
  * Implementation for managing academic periods.
@@ -27,12 +30,12 @@ public class SchoolPeriodDAOImplementation implements SchoolPeriodDAO {
     @Override
     public boolean save(SchoolPeriodDTO period) throws DataAccessException {
         String query = "INSERT INTO periodo_escolar (fecha_inicio, fecha_fin) VALUES (?, ?)";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setDate(1, period.getStartDate());
             preparedStatement.setDate(2, period.getEndDate());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error saving the school period.", e);
         }
     }
@@ -47,13 +50,13 @@ public class SchoolPeriodDAOImplementation implements SchoolPeriodDAO {
     @Override
     public boolean update(SchoolPeriodDTO period) throws DataAccessException {
         String query = "UPDATE periodo_escolar SET fecha_inicio = ?, fecha_fin = ? WHERE id_periodo_escolar = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setDate(1, period.getStartDate());
             preparedStatement.setDate(2, period.getEndDate());
             preparedStatement.setInt(3, period.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (SQLException| ConfigurationException e) {
             throw new DataAccessException("Error updating the school period.", e);
         }
     }
@@ -68,7 +71,7 @@ public class SchoolPeriodDAOImplementation implements SchoolPeriodDAO {
     @Override
     public SchoolPeriodDTO getById(int id) throws DataAccessException {
         String query = "SELECT * FROM periodo_escolar WHERE id_periodo_escolar = ?";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -80,7 +83,7 @@ public class SchoolPeriodDAOImplementation implements SchoolPeriodDAO {
                     return period;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving the school period.", e);
         }
         return null;
@@ -96,7 +99,7 @@ public class SchoolPeriodDAOImplementation implements SchoolPeriodDAO {
     public List<SchoolPeriodDTO> getAll() throws DataAccessException {
         List<SchoolPeriodDTO> periods = new ArrayList<>();
         String query = "SELECT * FROM periodo_escolar";
-        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnectionPool();
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -106,7 +109,7 @@ public class SchoolPeriodDAOImplementation implements SchoolPeriodDAO {
                 period.setEndDate(resultSet.getDate("fecha_fin"));
                 periods.add(period);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConfigurationException e) {
             throw new DataAccessException("Error retrieving school periods.", e);
         }
         return periods;
