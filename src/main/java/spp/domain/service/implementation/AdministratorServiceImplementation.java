@@ -1,7 +1,7 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package spp.domain.service.implementation;
 
 import spp.domain.service.AdministratorService;
@@ -11,7 +11,7 @@ import spp.domain.dto.ProfessorDTO;
 /**
  * Implementation of the AdministratorService interface.
  * Handles the business logic and rules for Administrator operations.
- */
+
 public class AdministratorServiceImplementation implements AdministratorService {
 
     private static final String STATUS_INACTIVE = "INACTIVE";
@@ -108,3 +108,4 @@ public class AdministratorServiceImplementation implements AdministratorService 
         return isDisabled;
     }
 }
+*/

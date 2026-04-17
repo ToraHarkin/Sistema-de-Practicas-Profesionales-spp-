@@ -1,7 +1,7 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+ 
 package spp.domain.service.implementation;
 
 import spp.domain.service.InternService;
@@ -10,7 +10,7 @@ import spp.domain.dto.ReportDTO;
 /**
  * Implementation of the InternService interface.
  * Handles the business logic and rules for Intern operations.
- */
+ 
 public class InternServiceImplementation implements InternService {
 
     private static final int MIN_PASSING_SCORE = 70;
@@ -84,3 +84,4 @@ public class InternServiceImplementation implements InternService {
         return isDelivered;
     }
 }
+*/

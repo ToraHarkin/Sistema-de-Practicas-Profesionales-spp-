@@ -1,7 +1,7 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package spp.domain.service.implementation;
 
 import spp.domain.service.CoordinatorService;
@@ -10,7 +10,7 @@ import spp.domain.dto.InternDTO;
 /**
  * Implementation of the CoordinatorService interface.
  * Handles the business logic and rules for Coordinator operations.
- */
+
 public class CoordinatorServiceImplementation implements CoordinatorService {
 
     private static final int MAX_PROJECT_CAPACITY = 3;
@@ -22,7 +22,7 @@ public class CoordinatorServiceImplementation implements CoordinatorService {
      * Registers a new intern in the system applying business rules.
      * * @param intern The data transfer object containing the intern's information.
      * @return true if the registration was successful, false otherwise.
-     */
+     
     @Override
     public boolean registerIntern(InternDTO intern) {
         boolean isRegistered = false;
@@ -51,7 +51,7 @@ public class CoordinatorServiceImplementation implements CoordinatorService {
      * * @param enrollment The unique enrollment ID of the intern.
      * @param projectId The unique ID of the project.
      * @return true if the assignment was successful, false otherwise.
-     */
+     
     @Override
     public boolean assignProject(String enrollment, int projectId) {
         boolean isAssigned = false;
@@ -77,3 +77,4 @@ public class CoordinatorServiceImplementation implements CoordinatorService {
         return isAssigned;
     }
 }
+*/
