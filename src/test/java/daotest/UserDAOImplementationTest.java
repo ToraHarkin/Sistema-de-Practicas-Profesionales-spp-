@@ -9,7 +9,7 @@ import spp.domain.dto.UserDTO;
 
 public class UserDAOImplementationTest {
    @Test
-    void save() {
+    void shouldSaveUserSuccessfully() {
         UserDAOImplementation userDAO = new  UserDAOImplementation();
        
         UserDTO user = new UserDTO();
@@ -22,7 +22,7 @@ public class UserDAOImplementationTest {
     }
    
    @Test
-   void getByAccount() {
+   void shouldReturnUserByAccount() {
         UserDAOImplementation userDAO = new  UserDAOImplementation();
         
         UserDTO user = new UserDTO();
@@ -38,7 +38,7 @@ public class UserDAOImplementationTest {
    }
    
    @Test
-   void updateStatus(){
+   void shouldUpdateUserStatus() {
        UserDAOImplementation userDAO = new  UserDAOImplementation();
         
        UserDTO user = new UserDTO();
