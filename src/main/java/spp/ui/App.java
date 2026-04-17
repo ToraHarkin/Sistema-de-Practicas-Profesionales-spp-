@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
+import spp.data.exception.ConfigurationException;
 
 /**
  * JavaFX App
@@ -38,7 +39,7 @@ public class App extends Application {
         try {
             spp.data.connection.ConnectionPool.getInstanceConectionPool().getConnection();
             System.out.println("INFO: ¡Conexión exitosa a la base de datos usando DBCP2!");
-        } catch (SQLException e) {
+        } catch (SQLException  | ConfigurationException e) {
             System.out.println("ERROR FATAL: No se pudo conectar a la base de datos.");
             System.out.println("Detalles: " + e.getMessage());
             // Si la base de datos está caída, el sistema de todos modos abrirá la ventana de JavaFX, 
