@@ -26,7 +26,7 @@ public class AdministratorServiceImplementation implements AdministratorService 
 
         try {
             if (coordinator == null || coordinator.getPersonalNumber() == null || coordinator.getPersonalNumber().isEmpty()) {
-                System.out.println("WARNING: Coordinator data or personal number cannot be empty.");
+                System.out.println("WARN: Coordinator data or personal number cannot be empty.");
                 return false;
             }
             
@@ -48,7 +48,7 @@ public class AdministratorServiceImplementation implements AdministratorService 
 
         try {
             if (personalNumber == null || personalNumber.isEmpty()) {
-                System.out.println("WARNING: Personal number is required to disable a coordinator.");
+                System.out.println("WARN: Personal number is required to disable a coordinator.");
                 return false;
             }
 
@@ -70,7 +70,7 @@ public class AdministratorServiceImplementation implements AdministratorService 
 
         try {
             if (professor == null || professor.getPersonalNumber() == null || professor.getPersonalNumber().isEmpty()) {
-                System.out.println("WARNING: Professor data or personal number cannot be empty.");
+                System.out.println("WARN: Professor data or personal number cannot be empty.");
                 return false;
             }
 
@@ -92,7 +92,7 @@ public class AdministratorServiceImplementation implements AdministratorService 
 
         try {
             if (personalNumber == null || personalNumber.isEmpty()) {
-                System.out.println("WARNING: Personal number is required to disable a professor.");
+                System.out.println("WARN: Personal number is required to disable a professor.");
                 return false;
             }
 

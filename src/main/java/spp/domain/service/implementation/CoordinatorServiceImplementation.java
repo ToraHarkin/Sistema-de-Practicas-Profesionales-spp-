@@ -29,7 +29,7 @@ public class CoordinatorServiceImplementation implements CoordinatorService {
 
         try {
             if (intern == null || intern.getEnrollment() == null || intern.getEnrollment().isEmpty()) {
-                System.out.println("WARNING: Intern data or enrollment cannot be empty.");
+                System.out.println("WARN: Intern data or enrollment cannot be empty.");
                 return false;
             }
             
@@ -58,7 +58,7 @@ public class CoordinatorServiceImplementation implements CoordinatorService {
 
         try {
             if (enrollment == null || enrollment.isEmpty() || projectId <= 0) {
-                System.out.println("WARNING: Invalid parameters for project assignment.");
+                System.out.println("WARN: Invalid parameters for project assignment.");
                 return false;
             }
 

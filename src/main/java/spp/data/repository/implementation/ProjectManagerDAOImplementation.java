@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.ProjectManagerDAO;
 import spp.domain.dto.ProjectManagerDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,10 +24,10 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
      *
      * @param manager DTO containing contact info.
      * @return true if successful.
-     * @throws DataAccessException If the project ID is invalid.
+     * @throws PersistenceException If the project ID is invalid.
      */
     @Override
-    public boolean save(ProjectManagerDTO manager) throws DataAccessException {
+    public boolean save(ProjectManagerDTO manager) throws PersistenceException {
         String query = "INSERT INTO responsable_proyecto (nombre, apellido_paterno, apellido_materno, cargo, telefono, correo_electronico, id_proyecto) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -40,7 +40,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
             preparedStatement.setInt(7, manager.getProjectId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the project manager.", e);
+            throw new PersistenceException("Error saving the project manager.", e);
         }
     }
 
@@ -49,10 +49,10 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
      *
      * @param manager DTO with updated information.
      * @return true if updated.
-     * @throws DataAccessException If SQL fails.
+     * @throws PersistenceException If SQL fails.
      */
     @Override
-    public boolean update(ProjectManagerDTO manager) throws DataAccessException {
+    public boolean update(ProjectManagerDTO manager) throws PersistenceException {
         String query = "UPDATE responsable_proyecto SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, cargo = ?, telefono = ?, correo_electronico = ? WHERE id_responsable_proyecto = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -65,7 +65,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
             preparedStatement.setInt(7, manager.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the project manager.", e);
+            throw new PersistenceException("Error updating the project manager.", e);
         }
     }
 
@@ -74,10 +74,10 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
      *
      * @param projectId Internal project identifier.
      * @return List of ProjectManagerDTOs.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public List<ProjectManagerDTO> getByProjectId(int projectId) throws DataAccessException {
+    public List<ProjectManagerDTO> getByProjectId(int projectId) throws PersistenceException {
         List<ProjectManagerDTO> managers = new ArrayList<>();
         String query = "SELECT * FROM responsable_proyecto WHERE id_proyecto = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -98,7 +98,7 @@ public class ProjectManagerDAOImplementation implements ProjectManagerDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving project managers.", e);
+            throw new PersistenceException("Error retrieving project managers.", e);
         }
         return managers;
     }

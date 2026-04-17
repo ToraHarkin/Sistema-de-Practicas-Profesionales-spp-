@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.ProjectDAO;
 import spp.domain.dto.ProjectDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,10 +24,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
      *
      * @param project The object encapsulating the information of the project to be registered.
      * @return true if the project was successfully saved in the relational schema.
-     * @throws DataAccessException If any foreign key constraint is violated.
+     * @throws PersistenceException If any foreign key constraint is violated.
      */
     @Override
-    public boolean save(ProjectDTO project) throws DataAccessException {
+    public boolean save(ProjectDTO project) throws PersistenceException {
         String query = "INSERT INTO proyecto (nombre, capacidad_practicantes, disponibilidad, descripcion, id_organizacion_vinculada) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -38,7 +38,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
             preparedStatement.setInt(5, project.getLinkedOrganizationId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error attempting to register the new project.", e);
+            throw new PersistenceException("Error attempting to register the new project.", e);
         }
     }
 
@@ -47,10 +47,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
      *
      * @param project The DTO object modified by the user. The ID must not be altered.
      * @return true if the modification impacted the database; false otherwise.
-     * @throws DataAccessException If an SQL syntax error occurs.
+     * @throws PersistenceException If an SQL syntax error occurs.
      */
     @Override
-    public boolean update(ProjectDTO project) throws DataAccessException {
+    public boolean update(ProjectDTO project) throws PersistenceException {
         String query = "UPDATE proyecto SET nombre = ?, capacidad_practicantes = ?, disponibilidad = ?, descripcion = ? WHERE id_proyecto = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -61,7 +61,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
             preparedStatement.setInt(5, project.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error attempting to modify the project details.", e);
+            throw new PersistenceException("Error attempting to modify the project details.", e);
         }
     }
 
@@ -70,10 +70,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
      *
      * @param id The auto-incremental identifier of the project.
      * @return The corresponding ProjectDTO object or null if there are no matches.
-     * @throws DataAccessException If there is a problem mapping the ResultSet.
+     * @throws PersistenceException If there is a problem mapping the ResultSet.
      */
     @Override
-    public ProjectDTO getById(int id) throws DataAccessException {
+    public ProjectDTO getById(int id) throws PersistenceException {
         String query = "SELECT * FROM proyecto WHERE id_proyecto = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -91,7 +91,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the requested project information.", e);
+            throw new PersistenceException("Error retrieving the requested project information.", e);
         }
         return null;
     }
@@ -100,10 +100,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
      * Generates a filtered catalog with all projects ready to receive interns.
      *
      * @return A list of ProjectDTOs whose availability status is active (1).
-     * @throws DataAccessException If the execution of the query is interrupted.
+     * @throws PersistenceException If the execution of the query is interrupted.
      */
     @Override
-    public List<ProjectDTO> getAllAvailable() throws DataAccessException {
+    public List<ProjectDTO> getAllAvailable() throws PersistenceException {
         List<ProjectDTO> projects = new ArrayList<>();
         String query = "SELECT * FROM proyecto WHERE disponibilidad = 1";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -120,7 +120,7 @@ public class ProjectDAOImplementation implements ProjectDAO {
                 projects.add(project);
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error compiling the list of available projects.", e);
+            throw new PersistenceException("Error compiling the list of available projects.", e);
         }
         return projects;
     }

@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.AssignedActivityDAO;
 import spp.domain.dto.AssignedActivityDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ import spp.data.exception.ConfigurationException;
 public class AssignedActivityDAOImplementation implements AssignedActivityDAO {
 
     @Override
-    public boolean save(AssignedActivityDTO assignedActivity) throws DataAccessException {
+    public boolean save(AssignedActivityDTO assignedActivity) throws PersistenceException {
         String query = "INSERT INTO actividad_asignada_practicante (observaciones, calificacion, ruta_actividad, id_practicante, id_actividad) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -31,12 +31,12 @@ public class AssignedActivityDAOImplementation implements AssignedActivityDAO {
             preparedStatement.setInt(5, assignedActivity.getActivityId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the assigned activity.", e);
+            throw new PersistenceException("Error saving the assigned activity.", e);
         }
     }
 
     @Override
-    public boolean updateGrade(int id, double grade, String observations) throws DataAccessException {
+    public boolean updateGrade(int id, double grade, String observations) throws PersistenceException {
         String query = "UPDATE actividad_asignada_practicante SET calificacion = ?, observaciones = ? WHERE id_actividad_asignada_practicante = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -45,12 +45,12 @@ public class AssignedActivityDAOImplementation implements AssignedActivityDAO {
             preparedStatement.setInt(3, id);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the assigned activity grade.", e);
+            throw new PersistenceException("Error updating the assigned activity grade.", e);
         }
     }
 
     @Override
-    public List<AssignedActivityDTO> getByInternId(int internId) throws DataAccessException {
+    public List<AssignedActivityDTO> getByInternId(int internId) throws PersistenceException {
         List<AssignedActivityDTO> assignments = new ArrayList<>();
         String query = "SELECT * FROM actividad_asignada_practicante WHERE id_practicante = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -69,7 +69,7 @@ public class AssignedActivityDAOImplementation implements AssignedActivityDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving assignments by intern.", e);
+            throw new PersistenceException("Error retrieving assignments by intern.", e);
         }
         return assignments;
     }

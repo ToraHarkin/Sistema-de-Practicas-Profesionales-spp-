@@ -9,13 +9,13 @@ import spp.domain.dto.UserDTO;
 import spp.domain.exception.DuplicateEntityException;
 import spp.domain.exception.IncompleteDataException;
 import spp.domain.exception.EntityNotFoundException;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 
 public interface InternService {
     
     void registerIntern(InternDTO intern, UserDTO user) 
-        throws DuplicateEntityException, IncompleteDataException, DataAccessException;
+        throws DuplicateEntityException, IncompleteDataException, PersistenceException;
         
     InternDTO getInternProfile(String enrollment) 
-        throws EntityNotFoundException, DataAccessException;
+        throws EntityNotFoundException, PersistenceException;
 }

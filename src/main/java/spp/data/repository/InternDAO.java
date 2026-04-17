@@ -2,13 +2,13 @@ package spp.data.repository;
 
 
 import spp.domain.dto.InternDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 
 public interface InternDAO {
-    boolean save(InternDTO intern) throws DataAccessException;
-    boolean update(InternDTO intern) throws DataAccessException;
-    InternDTO getByEnrollment(String enrollment) throws DataAccessException;
-    List<InternDTO> getAll() throws DataAccessException;
+    boolean save(InternDTO intern) throws PersistenceException;
+    boolean update(InternDTO intern) throws PersistenceException;
+    InternDTO getByEnrollment(String enrollment) throws PersistenceException;
+    List<InternDTO> getAll() throws PersistenceException;
 }

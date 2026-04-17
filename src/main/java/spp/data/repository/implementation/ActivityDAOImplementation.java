@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.ActivityDAO;
 import spp.domain.dto.ActivityDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class ActivityDAOImplementation implements ActivityDAO {
      *
      * @param activity DTO containing title, deadline, and description.
      * @return true if successful.
-     * @throws DataAccessException If foreign keys are violated.
+     * @throws PersistenceException If foreign keys are violated.
      */
     @Override
-    public boolean save(ActivityDTO activity) throws DataAccessException {
+    public boolean save(ActivityDTO activity) throws PersistenceException {
         String query = "INSERT INTO actividad (titulo, fecha_limite, descripcion, id_profesor) VALUES (?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -38,7 +38,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
             preparedStatement.setInt(4, activity.getProfessorId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the activity.", e);
+            throw new PersistenceException("Error saving the activity.", e);
         }
     }
 
@@ -47,10 +47,10 @@ public class ActivityDAOImplementation implements ActivityDAO {
      *
      * @param activity DTO containing the updated data.
      * @return true if updated.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean update(ActivityDTO activity) throws DataAccessException {
+    public boolean update(ActivityDTO activity) throws PersistenceException {
         String query = "UPDATE actividad SET titulo = ?, fecha_limite = ?, descripcion = ?, id_profesor = ? WHERE id_actividad = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -61,7 +61,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
             preparedStatement.setInt(5, activity.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the activity.", e);
+            throw new PersistenceException("Error updating the activity.", e);
         }
     }
 
@@ -70,10 +70,10 @@ public class ActivityDAOImplementation implements ActivityDAO {
      *
      * @param id The internal ID.
      * @return ActivityDTO object or null.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public ActivityDTO getById(int id) throws DataAccessException {
+    public ActivityDTO getById(int id) throws PersistenceException {
         String query = "SELECT * FROM actividad WHERE id_actividad = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -90,7 +90,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the activity.", e);
+            throw new PersistenceException("Error retrieving the activity.", e);
         }
         return null;
     }
@@ -100,10 +100,10 @@ public class ActivityDAOImplementation implements ActivityDAO {
      *
      * @param professorId The internal ID of the professor.
      * @return List of ActivityDTOs.
-     * @throws DataAccessException If data extraction fails.
+     * @throws PersistenceException If data extraction fails.
      */
     @Override
-    public List<ActivityDTO> getByProfessorId(int professorId) throws DataAccessException {
+    public List<ActivityDTO> getByProfessorId(int professorId) throws PersistenceException {
         List<ActivityDTO> activities = new ArrayList<>();
         String query = "SELECT * FROM actividad WHERE id_profesor = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -121,7 +121,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving activities by professor.", e);
+            throw new PersistenceException("Error retrieving activities by professor.", e);
         }
         return activities;
     }

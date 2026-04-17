@@ -2,14 +2,14 @@ package spp.data.repository;
 
 
 import spp.domain.dto.MessageDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 
 
 public interface MessageDAO {
-    boolean save(MessageDTO message) throws DataAccessException;
-    boolean update(MessageDTO message) throws DataAccessException;
-    MessageDTO getById(int id) throws DataAccessException;
-    List<MessageDTO> getAll() throws DataAccessException;
+    boolean save(MessageDTO message) throws PersistenceException;
+    boolean update(MessageDTO message) throws PersistenceException;
+    MessageDTO getById(int id) throws PersistenceException;
+    List<MessageDTO> getAll() throws PersistenceException;
 }

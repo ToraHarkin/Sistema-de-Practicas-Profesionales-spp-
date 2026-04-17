@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.RecordDAO;
 import spp.domain.dto.RecordDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,10 +22,10 @@ public class RecordDAOImplementation implements RecordDAO {
      *
      * @param record DTO containing references to intern, professor, and project.
      * @return true if successful.
-     * @throws DataAccessException If foreign keys are violated.
+     * @throws PersistenceException If foreign keys are violated.
      */
     @Override
-    public boolean save(RecordDTO record) throws DataAccessException {
+    public boolean save(RecordDTO record) throws PersistenceException {
         String query = "INSERT INTO expediente (promedio_final, id_practicante, id_proyecto, id_profesor, id_periodo_escolar) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -41,7 +41,7 @@ public class RecordDAOImplementation implements RecordDAO {
             preparedStatement.setInt(5, record.getSchoolPeriodId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error creating the academic record.", e);
+            throw new PersistenceException("Error creating the academic record.", e);
         }
     }
 
@@ -51,10 +51,10 @@ public class RecordDAOImplementation implements RecordDAO {
      * @param recordId Internal ID of the record.
      * @param finalGrade The calculated final grade.
      * @return true if updated.
-     * @throws DataAccessException If SQL fails.
+     * @throws PersistenceException If SQL fails.
      */
     @Override
-    public boolean updateFinalGrade(int recordId, double finalGrade) throws DataAccessException {
+    public boolean updateFinalGrade(int recordId, double finalGrade) throws PersistenceException {
         String query = "UPDATE expediente SET promedio_final = ? WHERE id_expediente = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -62,7 +62,7 @@ public class RecordDAOImplementation implements RecordDAO {
             preparedStatement.setInt(2, recordId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the final grade.", e);
+            throw new PersistenceException("Error updating the final grade.", e);
         }
     }
 
@@ -71,10 +71,10 @@ public class RecordDAOImplementation implements RecordDAO {
      *
      * @param internId The intern's identifier.
      * @return RecordDTO object or null.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public RecordDTO getByInternId(int internId) throws DataAccessException {
+    public RecordDTO getByInternId(int internId) throws PersistenceException {
         String query = "SELECT * FROM expediente WHERE id_practicante = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -97,7 +97,7 @@ public class RecordDAOImplementation implements RecordDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the academic record.", e);
+            throw new PersistenceException("Error retrieving the academic record.", e);
         }
         return null;
     }

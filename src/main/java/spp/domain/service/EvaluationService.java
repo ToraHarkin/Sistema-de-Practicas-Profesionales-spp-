@@ -8,15 +8,15 @@ import spp.domain.dto.SelfEvaluationDTO;
 import spp.domain.exception.DuplicateEntityException;
 import spp.domain.exception.IncompleteDataException;
 import spp.domain.exception.EntityNotFoundException;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 
 public interface EvaluationService {
     void registerSelfEvaluation(SelfEvaluationDTO selfEvaluation) 
-        throws DuplicateEntityException, IncompleteDataException, DataAccessException;
+        throws DuplicateEntityException, IncompleteDataException, PersistenceException;
         
     void gradeSupportDocument(int documentId, double grade, String observations) 
-        throws IncompleteDataException, EntityNotFoundException, DataAccessException;
+        throws IncompleteDataException, EntityNotFoundException, PersistenceException;
         
     double calculateFinalAverage(int internId) 
-        throws EntityNotFoundException, DataAccessException;
+        throws EntityNotFoundException, PersistenceException;
 }

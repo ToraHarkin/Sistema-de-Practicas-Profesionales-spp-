@@ -7,16 +7,16 @@ package spp.domain.service;
 import spp.domain.dto.ReportDTO;
 import spp.domain.exception.IncompleteDataException;
 import spp.domain.exception.FileStorageException;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 public interface ReportService {
     void uploadReport(ReportDTO report) 
-        throws IncompleteDataException, FileStorageException, DataAccessException;
+        throws IncompleteDataException, FileStorageException, PersistenceException;
         
     List<ReportDTO> getInternReports(int internId) 
-        throws DataAccessException;
+        throws PersistenceException;
         
     void validateReport(int reportId, String observations) 
-        throws IncompleteDataException, DataAccessException;
+        throws IncompleteDataException, PersistenceException;
 }

@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.SupportDocumentDAO;
 import spp.domain.dto.SupportDocumentDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,10 +24,10 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
      *
      * @param document DTO containing file details.
      * @return true if successful.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean save(SupportDocumentDTO document) throws DataAccessException {
+    public boolean save(SupportDocumentDTO document) throws PersistenceException {
         String query = "INSERT INTO documento_soporte (tipo, ruta_archivo, extension, tamaño, fecha, id_practicante, id_profesor) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -40,7 +40,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
             preparedStatement.setInt(7, document.getProfessorId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the support document.", e);
+            throw new PersistenceException("Error saving the support document.", e);
         }
     }
 
@@ -51,10 +51,10 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
      * @param grade The assigned grade.
      * @param observations Optional professor comments.
      * @return true if updated.
-     * @throws DataAccessException If SQL fails.
+     * @throws PersistenceException If SQL fails.
      */
     @Override
-    public boolean updateGrade(int documentId, double grade, String observations) throws DataAccessException {
+    public boolean updateGrade(int documentId, double grade, String observations) throws PersistenceException {
         String query = "UPDATE documento_soporte SET calificacion = ?, observaciones = ? WHERE id_documento_soporte = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -63,7 +63,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
             preparedStatement.setInt(3, documentId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the document grade.", e);
+            throw new PersistenceException("Error updating the document grade.", e);
         }
     }
 
@@ -72,10 +72,10 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
      *
      * @param internId The internal ID of the intern.
      * @return List of SupportDocumentDTOs.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public List<SupportDocumentDTO> getByInternId(int internId) throws DataAccessException {
+    public List<SupportDocumentDTO> getByInternId(int internId) throws PersistenceException {
         List<SupportDocumentDTO> documents = new ArrayList<>();
         String query = "SELECT * FROM documento_soporte WHERE id_practicante = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -98,7 +98,7 @@ public class SupportDocumentDAOImplementation implements SupportDocumentDAO {
                 }
             }
         } catch (SQLException  | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving support documents.", e);
+            throw new PersistenceException("Error retrieving support documents.", e);
         }
         return documents;
     }

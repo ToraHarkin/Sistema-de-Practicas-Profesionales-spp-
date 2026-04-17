@@ -2,13 +2,13 @@ package spp.data.repository;
 
 
 import spp.domain.dto.SchoolPeriodDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 
 public interface SchoolPeriodDAO {
-    boolean save(SchoolPeriodDTO period) throws DataAccessException;
-    boolean update(SchoolPeriodDTO period) throws DataAccessException;
-    SchoolPeriodDTO getById(int id) throws DataAccessException;
-    List<SchoolPeriodDTO> getAll() throws DataAccessException;
+    boolean save(SchoolPeriodDTO period) throws PersistenceException;
+    boolean update(SchoolPeriodDTO period) throws PersistenceException;
+    SchoolPeriodDTO getById(int id) throws PersistenceException;
+    List<SchoolPeriodDTO> getAll() throws PersistenceException;
 }

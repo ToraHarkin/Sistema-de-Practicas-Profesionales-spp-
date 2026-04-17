@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.MessageDAO;
 import spp.domain.dto.MessageDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class MessageDAOImplementation implements MessageDAO {
      *
      * @param message DTO containing subject and body.
      * @return true if successful.
-     * @throws DataAccessException If SQL fails.
+     * @throws PersistenceException If SQL fails.
      */
     @Override
-    public boolean save(MessageDTO message) throws DataAccessException {
+    public boolean save(MessageDTO message) throws PersistenceException {
         String query = "INSERT INTO mensaje (asunto, cuerpo) VALUES (?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -36,7 +36,7 @@ public class MessageDAOImplementation implements MessageDAO {
             preparedStatement.setString(2, message.getBody());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the message.", e);
+            throw new PersistenceException("Error saving the message.", e);
         }
     }
 
@@ -45,10 +45,10 @@ public class MessageDAOImplementation implements MessageDAO {
      *
      * @param message DTO with modified content.
      * @return true if updated.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean update(MessageDTO message) throws DataAccessException {
+    public boolean update(MessageDTO message) throws PersistenceException {
         String query = "UPDATE mensaje SET asunto = ?, cuerpo = ? WHERE id_mensaje = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -57,7 +57,7 @@ public class MessageDAOImplementation implements MessageDAO {
             preparedStatement.setInt(3, message.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the message.", e);
+            throw new PersistenceException("Error updating the message.", e);
         }
     }
 
@@ -66,10 +66,10 @@ public class MessageDAOImplementation implements MessageDAO {
      *
      * @param id The internal identifier.
      * @return MessageDTO or null.
-     * @throws DataAccessException If connection drops.
+     * @throws PersistenceException If connection drops.
      */
     @Override
-    public MessageDTO getById(int id) throws DataAccessException {
+    public MessageDTO getById(int id) throws PersistenceException {
         String query = "SELECT * FROM mensaje WHERE id_mensaje = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -84,7 +84,7 @@ public class MessageDAOImplementation implements MessageDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the message.", e);
+            throw new PersistenceException("Error retrieving the message.", e);
         }
         return null;
     }
@@ -93,10 +93,10 @@ public class MessageDAOImplementation implements MessageDAO {
      * Retrieves the complete catalog of raw messages.
      *
      * @return List of MessageDTOs.
-     * @throws DataAccessException If data extraction fails.
+     * @throws PersistenceException If data extraction fails.
      */
     @Override
-    public List<MessageDTO> getAll() throws DataAccessException {
+    public List<MessageDTO> getAll() throws PersistenceException {
         List<MessageDTO> messages = new ArrayList<>();
         String query = "SELECT * FROM mensaje";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -110,7 +110,7 @@ public class MessageDAOImplementation implements MessageDAO {
                 messages.add(message);
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving messages.", e);
+            throw new PersistenceException("Error retrieving messages.", e);
         }
         return messages;
     }

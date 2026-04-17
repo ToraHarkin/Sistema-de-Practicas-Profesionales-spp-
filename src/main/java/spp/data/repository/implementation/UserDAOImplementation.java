@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.UserDAO;
 import spp.domain.dto.UserDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,10 +22,10 @@ public class UserDAOImplementation implements UserDAO {
      *
      * @param user Transfer object containing the account, encrypted password, and initial status.
      * @return true if the user was created successfully; false otherwise.
-     * @throws DataAccessException If the database rejects the insertion due to technical conflicts.
+     * @throws PersistenceException If the database rejects the insertion due to technical conflicts.
      */
     @Override
-    public boolean save(UserDTO user) throws DataAccessException {
+    public boolean save(UserDTO user) throws PersistenceException {
         String query = "INSERT INTO usuario (contraseña, cuenta, estado, fecha_registro) VALUES (?, ?, ?, NOW())";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -34,7 +34,7 @@ public class UserDAOImplementation implements UserDAO {
             preparedStatement.setString(3, user.getStatus());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error registering the new user account.", e);
+            throw new PersistenceException("Error registering the new user account.", e);
         }
     }
 
@@ -43,10 +43,10 @@ public class UserDAOImplementation implements UserDAO {
      *
      * @param account The unique username (account) in the system.
      * @return A retrieved UserDTO object, or null if the credentials do not match.
-     * @throws DataAccessException If communication with the MySQL server is lost.
+     * @throws PersistenceException If communication with the MySQL server is lost.
      */
     @Override
-    public UserDTO getByAccount(String account) throws DataAccessException {
+    public UserDTO getByAccount(String account) throws PersistenceException {
         String query = "SELECT * FROM usuario WHERE cuenta = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -62,7 +62,7 @@ public class UserDAOImplementation implements UserDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error verifying the existence of the user account.", e);
+            throw new PersistenceException("Error verifying the existence of the user account.", e);
         }
         return null;
     }
@@ -73,10 +73,10 @@ public class UserDAOImplementation implements UserDAO {
      * @param userId The unique internal identifier of the user.
      * @param status The new status to be assigned (e.g., "Activo", "Inactivo").
      * @return true if the status change was applied; false if the user does not exist.
-     * @throws DataAccessException If an error occurs during the update process.
+     * @throws PersistenceException If an error occurs during the update process.
      */
     @Override
-    public boolean updateStatus(int userId, String status) throws DataAccessException {
+    public boolean updateStatus(int userId, String status) throws PersistenceException {
         String query = "UPDATE usuario SET estado = ? WHERE id_usuario = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -84,7 +84,7 @@ public class UserDAOImplementation implements UserDAO {
             preparedStatement.setInt(2, userId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error processing the user's status change.", e);
+            throw new PersistenceException("Error processing the user's status change.", e);
         }
     }
 }

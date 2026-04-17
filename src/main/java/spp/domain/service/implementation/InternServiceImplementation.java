@@ -24,7 +24,7 @@ public class InternServiceImplementation implements InternService {
 
         try {
             if (report == null || report.getDescription() == null || report.getDescription().isEmpty()) {
-                System.out.println("WARNING: Report data cannot be empty.");
+                System.out.println("WARN: Report data cannot be empty.");
                 return false;
             }
             
@@ -46,7 +46,7 @@ public class InternServiceImplementation implements InternService {
 
         try {
             if (enrollment == null || enrollment.isEmpty() || score < 0 || score > 100) {
-                System.out.println("WARNING: Invalid data for self-evaluation.");
+                System.out.println("WARN: Invalid data for self-evaluation.");
                 return false;
             }
 
@@ -68,7 +68,7 @@ public class InternServiceImplementation implements InternService {
 
         try {
             if (enrollment == null || documentPath == null || documentPath.isEmpty()) {
-                System.out.println("WARNING: Invalid document or enrollment data.");
+                System.out.println("WARN: Invalid document or enrollment data.");
                 return false;
             }
 

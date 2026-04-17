@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.ProfessorDAO;
 import spp.domain.dto.ProfessorDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
      *
      * @param professor DTO containing the professor's data.
      * @return true if saved successfully; false otherwise.
-     * @throws DataAccessException If a foreign key (user ID) constraint fails.
+     * @throws PersistenceException If a foreign key (user ID) constraint fails.
      */
     @Override
-    public boolean save(ProfessorDTO professor) throws DataAccessException {
+    public boolean save(ProfessorDTO professor) throws PersistenceException {
         String query = "INSERT INTO profesor (numero_personal, nombre, apellido_paterno, apellido_materno, tiempo_servicio_meses, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -40,7 +40,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
             preparedStatement.setInt(6, professor.getUserId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the professor.", e);
+            throw new PersistenceException("Error saving the professor.", e);
         }
     }
 
@@ -49,10 +49,10 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
      *
      * @param professor DTO with the updated data.
      * @return true if updated successfully.
-     * @throws DataAccessException If an SQL error occurs.
+     * @throws PersistenceException If an SQL error occurs.
      */
     @Override
-    public boolean update(ProfessorDTO professor) throws DataAccessException {
+    public boolean update(ProfessorDTO professor) throws PersistenceException {
         String query = "UPDATE profesor SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, tiempo_servicio_meses = ? WHERE numero_personal = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -63,7 +63,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
             preparedStatement.setString(5, professor.getPersonalNumber());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the professor.", e);
+            throw new PersistenceException("Error updating the professor.", e);
         }
     }
 
@@ -72,10 +72,10 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
      *
      * @param personalNumber The university identification number.
      * @return ProfessorDTO object or null if not found.
-     * @throws DataAccessException If database connection fails.
+     * @throws PersistenceException If database connection fails.
      */
     @Override
-    public ProfessorDTO getByPersonalNumber(String personalNumber) throws DataAccessException {
+    public ProfessorDTO getByPersonalNumber(String personalNumber) throws PersistenceException {
         String query = "SELECT * FROM profesor WHERE numero_personal = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -94,7 +94,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the professor.", e);
+            throw new PersistenceException("Error retrieving the professor.", e);
         }
         return null;
     }
@@ -103,10 +103,10 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
      * Retrieves a list of all professors.
      *
      * @return A list of ProfessorDTO objects.
-     * @throws DataAccessException If data extraction fails.
+     * @throws PersistenceException If data extraction fails.
      */
     @Override
-    public List<ProfessorDTO> getAll() throws DataAccessException {
+    public List<ProfessorDTO> getAll() throws PersistenceException {
         List<ProfessorDTO> professors = new ArrayList<>();
         String query = "SELECT * FROM profesor";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -124,7 +124,7 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
                 professors.add(prof);
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the list of professors.", e);
+            throw new PersistenceException("Error retrieving the list of professors.", e);
         }
         return professors;
     }

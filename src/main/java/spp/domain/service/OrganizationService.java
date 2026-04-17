@@ -9,16 +9,16 @@ import spp.domain.dto.OrganizationAddressDTO;
 import spp.domain.exception.DuplicateEntityException;
 import spp.domain.exception.IncompleteDataException;
 import spp.domain.exception.EntityNotFoundException;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 public interface OrganizationService {
     void registerOrganization(LinkedOrganizationDTO organization, OrganizationAddressDTO address) 
-        throws DuplicateEntityException, IncompleteDataException, DataAccessException;
+        throws DuplicateEntityException, IncompleteDataException, PersistenceException;
         
     List<LinkedOrganizationDTO> getAllOrganizations() 
-        throws DataAccessException;
+        throws PersistenceException;
         
     void updateOrganizationContact(int organizationId, String phone, String email) 
-        throws IncompleteDataException, EntityNotFoundException, DataAccessException;
+        throws IncompleteDataException, EntityNotFoundException, PersistenceException;
 }

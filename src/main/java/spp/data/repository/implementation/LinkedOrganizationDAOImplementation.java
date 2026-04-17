@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.LinkedOrganizationDAO;
 import spp.domain.dto.LinkedOrganizationDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
      *
      * @param organization DTO containing the organization's information.
      * @return true if the insertion was successful; false otherwise.
-     * @throws DataAccessException If a database constraint is violated (e.g. duplicate email).
+     * @throws PersistenceException If a database constraint is violated (e.g. duplicate email).
      */
     @Override
-    public boolean save(LinkedOrganizationDTO organization) throws DataAccessException {
+    public boolean save(LinkedOrganizationDTO organization) throws PersistenceException {
         String query = "INSERT INTO organizacion_vinculada (nombre, telefono, correo_electronico, sector) VALUES (?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -38,7 +38,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
             preparedStatement.setString(4, organization.getSector());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the linked organization.", e);
+            throw new PersistenceException("Error saving the linked organization.", e);
         }
     }
 
@@ -47,10 +47,10 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
      *
      * @param organization DTO with updated information. ID must be present.
      * @return true if the record was updated.
-     * @throws DataAccessException If the SQL execution fails.
+     * @throws PersistenceException If the SQL execution fails.
      */
     @Override
-    public boolean update(LinkedOrganizationDTO organization) throws DataAccessException {
+    public boolean update(LinkedOrganizationDTO organization) throws PersistenceException {
         String query = "UPDATE organizacion_vinculada SET nombre = ?, telefono = ?, correo_electronico = ?, sector = ? WHERE id_organizacion_vinculada = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -61,7 +61,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
             preparedStatement.setInt(5, organization.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the linked organization.", e);
+            throw new PersistenceException("Error updating the linked organization.", e);
         }
     }
 
@@ -70,10 +70,10 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
      *
      * @param id The primary key of the organization.
      * @return LinkedOrganizationDTO object or null if not found.
-     * @throws DataAccessException If communication with the database is lost.
+     * @throws PersistenceException If communication with the database is lost.
      */
     @Override
-    public LinkedOrganizationDTO getById(int id) throws DataAccessException {
+    public LinkedOrganizationDTO getById(int id) throws PersistenceException {
         String query = "SELECT * FROM organizacion_vinculada WHERE id_organizacion_vinculada = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -90,7 +90,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the linked organization.", e);
+            throw new PersistenceException("Error retrieving the linked organization.", e);
         }
         return null;
     }
@@ -99,10 +99,10 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
      * Retrieves a full list of all registered organizations.
      *
      * @return A list of LinkedOrganizationDTOs.
-     * @throws DataAccessException If the query cannot be executed.
+     * @throws PersistenceException If the query cannot be executed.
      */
     @Override
-    public List<LinkedOrganizationDTO> getAll() throws DataAccessException {
+    public List<LinkedOrganizationDTO> getAll() throws PersistenceException {
         List<LinkedOrganizationDTO> organizations = new ArrayList<>();
         String query = "SELECT * FROM organizacion_vinculada";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -118,7 +118,7 @@ public class LinkedOrganizationDAOImplementation implements LinkedOrganizationDA
                 organizations.add(org);
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the list of linked organizations.", e);
+            throw new PersistenceException("Error retrieving the list of linked organizations.", e);
         }
         return organizations;
     }

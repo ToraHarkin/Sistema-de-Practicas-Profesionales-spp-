@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.ShiftDAO;
 import spp.domain.dto.ShiftDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,17 +25,17 @@ public class ShiftDAOImplementation implements ShiftDAO {
      *
      * @param shift DTO containing the shift details.
      * @return true if successful.
-     * @throws DataAccessException If SQL fails.
+     * @throws PersistenceException If SQL fails.
      */
     @Override
-    public boolean save(ShiftDTO shift) throws DataAccessException {
+    public boolean save(ShiftDTO shift) throws PersistenceException {
         String query = "INSERT INTO turno (nombre) VALUES (?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, shift.getName());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the shift.", e);
+            throw new PersistenceException("Error saving the shift.", e);
         }
     }
 
@@ -44,10 +44,10 @@ public class ShiftDAOImplementation implements ShiftDAO {
      *
      * @param shift DTO containing the updated name and ID.
      * @return true if updated.
-     * @throws DataAccessException If execution fails.
+     * @throws PersistenceException If execution fails.
      */
     @Override
-    public boolean update(ShiftDTO shift) throws DataAccessException {
+    public boolean update(ShiftDTO shift) throws PersistenceException {
         String query = "UPDATE turno SET nombre = ? WHERE id_turno = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -55,7 +55,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
             preparedStatement.setInt(2, shift.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the shift.", e);
+            throw new PersistenceException("Error updating the shift.", e);
         }
     }
 
@@ -64,10 +64,10 @@ public class ShiftDAOImplementation implements ShiftDAO {
      *
      * @param id The internal identifier.
      * @return ShiftDTO object or null.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public ShiftDTO getById(int id) throws DataAccessException {
+    public ShiftDTO getById(int id) throws PersistenceException {
         String query = "SELECT * FROM turno WHERE id_turno = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -81,7 +81,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the shift.", e);
+            throw new PersistenceException("Error retrieving the shift.", e);
         }
         return null;
     }
@@ -90,10 +90,10 @@ public class ShiftDAOImplementation implements ShiftDAO {
      * Retrieves all available shifts.
      *
      * @return List of ShiftDTOs.
-     * @throws DataAccessException If connection is lost.
+     * @throws PersistenceException If connection is lost.
      */
     @Override
-    public List<ShiftDTO> getAll() throws DataAccessException {
+    public List<ShiftDTO> getAll() throws PersistenceException {
         List<ShiftDTO> shifts = new ArrayList<>();
         String query = "SELECT * FROM turno";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -106,7 +106,7 @@ public class ShiftDAOImplementation implements ShiftDAO {
                 shifts.add(shift);
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving shifts.", e);
+            throw new PersistenceException("Error retrieving shifts.", e);
         }
         return shifts;
     }

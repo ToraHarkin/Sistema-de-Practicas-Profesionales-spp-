@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.SelfEvaluationDAO;
 import spp.domain.dto.SelfEvaluationDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
      *
      * @param evaluation DTO containing registration timestamp and intern reference.
      * @return true if successful.
-     * @throws DataAccessException If SQL execution fails.
+     * @throws PersistenceException If SQL execution fails.
      */
     @Override
-    public boolean save(SelfEvaluationDTO evaluation) throws DataAccessException {
+    public boolean save(SelfEvaluationDTO evaluation) throws PersistenceException {
         String query = "INSERT INTO autoevaluacion (fecha_registro, id_practicante) VALUES (?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -36,7 +36,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
             preparedStatement.setInt(2, evaluation.getInternId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the self evaluation.", e);
+            throw new PersistenceException("Error saving the self evaluation.", e);
         }
     }
 
@@ -45,10 +45,10 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
      *
      * @param evaluation DTO with updated information.
      * @return true if modified.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean update(SelfEvaluationDTO evaluation) throws DataAccessException {
+    public boolean update(SelfEvaluationDTO evaluation) throws PersistenceException {
         String query = "UPDATE autoevaluacion SET fecha_registro = ?, id_practicante = ? WHERE id_autoevaluacion = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -57,7 +57,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
             preparedStatement.setInt(3, evaluation.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the self evaluation.", e);
+            throw new PersistenceException("Error updating the self evaluation.", e);
         }
     }
 
@@ -66,10 +66,10 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
      *
      * @param id The internal ID.
      * @return SelfEvaluationDTO or null.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public SelfEvaluationDTO getById(int id) throws DataAccessException {
+    public SelfEvaluationDTO getById(int id) throws PersistenceException {
         String query = "SELECT * FROM autoevaluacion WHERE id_autoevaluacion = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -84,7 +84,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the self evaluation.", e);
+            throw new PersistenceException("Error retrieving the self evaluation.", e);
         }
         return null;
     }
@@ -94,10 +94,10 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
      *
      * @param internId The internal ID of the intern.
      * @return List of SelfEvaluationDTOs.
-     * @throws DataAccessException If data extraction fails.
+     * @throws PersistenceException If data extraction fails.
      */
     @Override
-    public List<SelfEvaluationDTO> getByInternId(int internId) throws DataAccessException {
+    public List<SelfEvaluationDTO> getByInternId(int internId) throws PersistenceException {
         List<SelfEvaluationDTO> evaluations = new ArrayList<>();
         String query = "SELECT * FROM autoevaluacion WHERE id_practicante = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -113,7 +113,7 @@ public class SelfEvaluationDAOImplementation implements SelfEvaluationDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving self evaluations by intern.", e);
+            throw new PersistenceException("Error retrieving self evaluations by intern.", e);
         }
         return evaluations;
     }

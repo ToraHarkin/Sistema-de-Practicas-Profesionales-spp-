@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.AdministratorDAO;
 import spp.domain.dto.AdministratorDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
      *
      * @param admin DTO containing the administrator details.
      * @return true if successful.
-     * @throws DataAccessException If SQL execution fails.
+     * @throws PersistenceException If SQL execution fails.
      */
     @Override
-    public boolean save(AdministratorDTO admin) throws DataAccessException {
+    public boolean save(AdministratorDTO admin) throws PersistenceException {
         String query = "INSERT INTO administrador (cuenta_usuario, id_usuario) VALUES (?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -36,7 +36,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
             preparedStatement.setInt(2, admin.getUserId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the administrator.", e);
+            throw new PersistenceException("Error saving the administrator.", e);
         }
     }
 
@@ -45,10 +45,10 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
      *
      * @param admin DTO with updated information.
      * @return true if the record was modified.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean update(AdministratorDTO admin) throws DataAccessException {
+    public boolean update(AdministratorDTO admin) throws PersistenceException {
         String query = "UPDATE administrador SET cuenta_usuario = ?, id_usuario = ? WHERE id_administrador = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -57,7 +57,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
             preparedStatement.setInt(3, admin.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the administrator.", e);
+            throw new PersistenceException("Error updating the administrator.", e);
         }
     }
 
@@ -66,10 +66,10 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
      *
      * @param userAccount The unique account name.
      * @return AdministratorDTO or null.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public AdministratorDTO getByUserAccount(String userAccount) throws DataAccessException {
+    public AdministratorDTO getByUserAccount(String userAccount) throws PersistenceException {
         String query = "SELECT * FROM administrador WHERE cuenta_usuario = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -84,7 +84,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the administrator.", e);
+            throw new PersistenceException("Error retrieving the administrator.", e);
         }
         return null;
     }
@@ -93,10 +93,10 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
      * Retrieves all registered administrators.
      *
      * @return List of AdministratorDTOs.
-     * @throws DataAccessException If data extraction fails.
+     * @throws PersistenceException If data extraction fails.
      */
     @Override
-    public List<AdministratorDTO> getAll() throws DataAccessException {
+    public List<AdministratorDTO> getAll() throws PersistenceException {
         List<AdministratorDTO> admins = new ArrayList<>();
         String query = "SELECT * FROM administrador";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -110,7 +110,7 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
                 admins.add(admin);
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the administrators.", e);
+            throw new PersistenceException("Error retrieving the administrators.", e);
         }
         return admins;
     }

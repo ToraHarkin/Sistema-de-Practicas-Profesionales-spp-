@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.OrganizationAddressDAO;
 import spp.domain.dto.OrganizationAddressDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,10 +22,10 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
      *
      * @param address DTO containing location data.
      * @return true if successful.
-     * @throws DataAccessException If execution fails.
+     * @throws PersistenceException If execution fails.
      */
     @Override
-    public boolean save(OrganizationAddressDTO address) throws DataAccessException {
+    public boolean save(OrganizationAddressDTO address) throws PersistenceException {
         String query = "INSERT INTO direccion_organizacion (calle, numero_exterior, numero_interior, colonia, codigo_postal, ciudad, pais, id_organizacion_vinculada) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -39,7 +39,7 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
             preparedStatement.setInt(8, address.getLinkedOrganizationId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the organization address.", e);
+            throw new PersistenceException("Error saving the organization address.", e);
         }
     }
 
@@ -48,10 +48,10 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
      *
      * @param address DTO with modified fields.
      * @return true if updated.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean update(OrganizationAddressDTO address) throws DataAccessException {
+    public boolean update(OrganizationAddressDTO address) throws PersistenceException {
         String query = "UPDATE direccion_organizacion SET calle = ?, numero_exterior = ?, numero_interior = ?, colonia = ?, codigo_postal = ?, ciudad = ?, pais = ? WHERE id_direccion_organizacion = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -65,7 +65,7 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
             preparedStatement.setInt(8, address.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the organization address.", e);
+            throw new PersistenceException("Error updating the organization address.", e);
         }
     }
 
@@ -74,10 +74,10 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
      *
      * @param organizationId Internal ID of the linked organization.
      * @return OrganizationAddressDTO or null if not found.
-     * @throws DataAccessException If connection is lost.
+     * @throws PersistenceException If connection is lost.
      */
     @Override
-    public OrganizationAddressDTO getByOrganizationId(int organizationId) throws DataAccessException {
+    public OrganizationAddressDTO getByOrganizationId(int organizationId) throws PersistenceException {
         String query = "SELECT * FROM direccion_organizacion WHERE id_organizacion_vinculada = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -98,7 +98,7 @@ public class OrganizationAddressDAOImplementation implements OrganizationAddress
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the address.", e);
+            throw new PersistenceException("Error retrieving the address.", e);
         }
         return null;
     }

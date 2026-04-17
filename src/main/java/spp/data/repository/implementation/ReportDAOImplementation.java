@@ -3,7 +3,7 @@ package spp.data.repository.implementation;
 
 import spp.data.repository.ReportDAO;
 import spp.domain.dto.ReportDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import spp.data.connection.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +25,10 @@ public class ReportDAOImplementation implements ReportDAO {
      *
      * @param report DTO with report details.
      * @return true if insertion is successful.
-     * @throws DataAccessException If foreign keys (intern, period) are invalid.
+     * @throws PersistenceException If foreign keys (intern, period) are invalid.
      */
     @Override
-    public boolean save(ReportDTO report) throws DataAccessException {
+    public boolean save(ReportDTO report) throws PersistenceException {
         String query = "INSERT INTO reporte (tipo, fecha_entrega, nrc, periodo_abarca, horas_cubiertas, descripcion, id_practicante, id_periodo_escolar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -42,7 +42,7 @@ public class ReportDAOImplementation implements ReportDAO {
             preparedStatement.setInt(8, report.getSchoolPeriodId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error saving the report.", e);
+            throw new PersistenceException("Error saving the report.", e);
         }
     }
 
@@ -51,10 +51,10 @@ public class ReportDAOImplementation implements ReportDAO {
      *
      * @param report DTO with updated information and original ID.
      * @return true if updated successfully.
-     * @throws DataAccessException If SQL syntax is incorrect.
+     * @throws PersistenceException If SQL syntax is incorrect.
      */
     @Override
-    public boolean update(ReportDTO report) throws DataAccessException {
+    public boolean update(ReportDTO report) throws PersistenceException {
         String query = "UPDATE reporte SET tipo = ?, fecha_entrega = ?, nrc = ?, periodo_abarca = ?, horas_cubiertas = ?, descripcion = ?, id_practicante = ?, id_periodo_escolar = ? WHERE id_reporte = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -69,7 +69,7 @@ public class ReportDAOImplementation implements ReportDAO {
             preparedStatement.setInt(9, report.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error updating the report.", e);
+            throw new PersistenceException("Error updating the report.", e);
         }
     }
 
@@ -78,17 +78,17 @@ public class ReportDAOImplementation implements ReportDAO {
      *
      * @param reportId The internal ID of the report.
      * @return true if deleted.
-     * @throws DataAccessException If SQL execution fails.
+     * @throws PersistenceException If SQL execution fails.
      */
     @Override
-    public boolean delete(int reportId) throws DataAccessException {
+    public boolean delete(int reportId) throws PersistenceException {
         String query = "DELETE FROM reporte WHERE id_reporte = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, reportId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error deleting the report.", e);
+            throw new PersistenceException("Error deleting the report.", e);
         }
     }
 
@@ -97,10 +97,10 @@ public class ReportDAOImplementation implements ReportDAO {
      *
      * @param reportId The internal ID of the report.
      * @return ReportDTO object or null if not found.
-     * @throws DataAccessException If database connection fails.
+     * @throws PersistenceException If database connection fails.
      */
     @Override
-    public ReportDTO getById(int reportId) throws DataAccessException {
+    public ReportDTO getById(int reportId) throws PersistenceException {
         String query = "SELECT * FROM reporte WHERE id_reporte = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -121,7 +121,7 @@ public class ReportDAOImplementation implements ReportDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving the report.", e);
+            throw new PersistenceException("Error retrieving the report.", e);
         }
         return null;
     }
@@ -131,10 +131,10 @@ public class ReportDAOImplementation implements ReportDAO {
      *
      * @param internId The internal ID of the intern.
      * @return List of ReportDTOs.
-     * @throws DataAccessException If query fails.
+     * @throws PersistenceException If query fails.
      */
     @Override
-    public List<ReportDTO> getByInternId(int internId) throws DataAccessException {
+    public List<ReportDTO> getByInternId(int internId) throws PersistenceException {
         List<ReportDTO> reports = new ArrayList<>();
         String query = "SELECT * FROM reporte WHERE id_practicante = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
@@ -156,7 +156,7 @@ public class ReportDAOImplementation implements ReportDAO {
                 }
             }
         } catch (SQLException | ConfigurationException e) {
-            throw new DataAccessException("Error retrieving reports by intern.", e);
+            throw new PersistenceException("Error retrieving reports by intern.", e);
         }
         return reports;
     }

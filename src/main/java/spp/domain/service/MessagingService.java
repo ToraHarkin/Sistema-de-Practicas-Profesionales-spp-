@@ -7,16 +7,16 @@ package spp.domain.service;
 import spp.domain.dto.MessageDTO;
 import spp.domain.exception.IncompleteDataException;
 import spp.domain.exception.EntityNotFoundException;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 public interface MessagingService {
     void sendMessage(int senderId, int receiverId, String subject, String body) 
-        throws IncompleteDataException, EntityNotFoundException, DataAccessException;
+        throws IncompleteDataException, EntityNotFoundException, PersistenceException;
         
     List<MessageDTO> getMyInbox(int userId) 
-        throws DataAccessException;
+        throws PersistenceException;
         
     void markAsRead(int messageId) 
-        throws EntityNotFoundException, DataAccessException;
+        throws EntityNotFoundException, PersistenceException;
 }

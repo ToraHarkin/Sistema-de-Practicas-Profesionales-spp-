@@ -1,12 +1,12 @@
 package spp.data.repository;
 
 import spp.domain.dto.ProjectManagerDTO;
-import spp.data.exception.DataAccessException;
+import spp.data.exception.PersistenceException;
 import java.util.List;
 
 
 public interface ProjectManagerDAO {
-    boolean save(ProjectManagerDTO manager) throws DataAccessException;
-    boolean update(ProjectManagerDTO manager) throws DataAccessException;
-    List<ProjectManagerDTO> getByProjectId(int projectId) throws DataAccessException;
+    boolean save(ProjectManagerDTO manager) throws PersistenceException;
+    boolean update(ProjectManagerDTO manager) throws PersistenceException;
+    List<ProjectManagerDTO> getByProjectId(int projectId) throws PersistenceException;
 }
