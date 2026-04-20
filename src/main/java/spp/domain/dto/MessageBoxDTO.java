@@ -1,14 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package spp.domain.dto;
+
+import spp.domain.enums.RoleMessageBox;
+import spp.domain.enums.StatusMessageBox;
+
 
 public class MessageBoxDTO {
     private int id;
-    private String role; // Sender/Receiver
-    private String status; // Draft/Sent
+    private RoleMessageBox role;
+    private StatusMessageBox status;
     private int messageId;
     private int userId;
 
@@ -23,19 +22,19 @@ public class MessageBoxDTO {
         this.id = id;
     }
 
-    public String getRole() {
+    public RoleMessageBox getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(RoleMessageBox role) {
         this.role = role;
     }
 
-    public String getStatus() {
+    public StatusMessageBox getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusMessageBox status) {
         this.status = status;
     }
 

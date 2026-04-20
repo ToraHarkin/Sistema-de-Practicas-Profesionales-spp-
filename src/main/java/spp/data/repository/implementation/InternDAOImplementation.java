@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import spp.data.exception.ConfigurationException;
+import spp.domain.enums.Gender;
 
 
 /**
@@ -37,7 +38,7 @@ public class InternDAOImplementation implements InternDAO {
             preparedStatement.setString(3, intern.getPaternalSurname());
             preparedStatement.setString(4, intern.getMaternalSurname());
             preparedStatement.setInt(5, intern.getAge());
-            preparedStatement.setString(6, intern.getGender());
+            preparedStatement.setString(6, intern.getGender().getDatabaseValue());
             preparedStatement.setString(7, intern.getIndigenousLanguage());
             preparedStatement.setInt(8, intern.getUserId());
             return preparedStatement.executeUpdate() > 0;
@@ -62,7 +63,7 @@ public class InternDAOImplementation implements InternDAO {
             preparedStatement.setString(2, intern.getPaternalSurname());
             preparedStatement.setString(3, intern.getMaternalSurname());
             preparedStatement.setInt(4, intern.getAge());
-            preparedStatement.setString(5, intern.getGender());
+            preparedStatement.setString(5, intern.getGender().getDatabaseValue());
             preparedStatement.setString(6, intern.getIndigenousLanguage());
             preparedStatement.setString(7, intern.getEnrollment());
             return preparedStatement.executeUpdate() > 0;
@@ -93,7 +94,7 @@ public class InternDAOImplementation implements InternDAO {
                     intern.setPaternalSurname(resultSet.getString("apellido_paterno"));
                     intern.setMaternalSurname(resultSet.getString("apellido_materno"));
                     intern.setAge(resultSet.getInt("edad"));
-                    intern.setGender(resultSet.getString("sexo"));
+                    intern.setGender(Gender.fromDatabaseValue(resultSet.getString("sexo")));
                     intern.setIndigenousLanguage(resultSet.getString("lengua_indigena"));
                     intern.setUserId(resultSet.getInt("id_usuario"));
                     return intern;
@@ -126,7 +127,7 @@ public class InternDAOImplementation implements InternDAO {
                 intern.setPaternalSurname(resultSet.getString("apellido_paterno"));
                 intern.setMaternalSurname(resultSet.getString("apellido_materno"));
                 intern.setAge(resultSet.getInt("edad"));
-                intern.setGender(resultSet.getString("sexo"));
+                intern.setGender(Gender.fromDatabaseValue(resultSet.getString("sexo")));
                 intern.setIndigenousLanguage(resultSet.getString("lengua_indigena"));
                 intern.setUserId(resultSet.getInt("id_usuario"));
                 interns.add(intern);

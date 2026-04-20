@@ -1,8 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
+
+import spp.domain.enums.Gender;
+
 
 public class InternDTO {
 
@@ -12,7 +11,7 @@ public class InternDTO {
     private String paternalSurname;
     private String maternalSurname;
     private int age;
-    private String gender;
+    private Gender gender;
     private String indigenousLanguage;
     private int userId;
     private int selfEvaluationId;
@@ -68,11 +67,11 @@ public class InternDTO {
         this.age = age;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
