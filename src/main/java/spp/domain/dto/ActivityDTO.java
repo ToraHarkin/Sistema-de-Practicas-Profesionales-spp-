@@ -1,11 +1,11 @@
 package spp.domain.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class ActivityDTO {
     private int id;
     private String title;
-    private Timestamp deadline;
+    private LocalDateTime deadline;
     private String description;
     private int professorId;
 
@@ -25,11 +25,11 @@ public class ActivityDTO {
         this.title = title;
     }
 
-    public Timestamp getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Timestamp deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 

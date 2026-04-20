@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import spp.data.exception.ConfigurationException;
@@ -33,7 +34,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, activity.getTitle());
-            preparedStatement.setTimestamp(2, activity.getDeadline());
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(activity.getDeadline()));
             preparedStatement.setString(3, activity.getDescription());
             preparedStatement.setInt(4, activity.getProfessorId());
             return preparedStatement.executeUpdate() > 0;
@@ -55,7 +56,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, activity.getTitle());
-            preparedStatement.setTimestamp(2, activity.getDeadline());
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(activity.getDeadline()));
             preparedStatement.setString(3, activity.getDescription());
             preparedStatement.setInt(4, activity.getProfessorId());
             preparedStatement.setInt(5, activity.getId());
@@ -83,7 +84,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
                     ActivityDTO activity = new ActivityDTO();
                     activity.setId(resultSet.getInt("id_actividad"));
                     activity.setTitle(resultSet.getString("titulo"));
-                    activity.setDeadline(resultSet.getTimestamp("fecha_limite"));
+                    activity.setDeadline(resultSet.getTimestamp("fecha_limite").toLocalDateTime());
                     activity.setDescription(resultSet.getString("descripcion"));
                     activity.setProfessorId(resultSet.getInt("id_profesor"));
                     return activity;
@@ -114,7 +115,7 @@ public class ActivityDAOImplementation implements ActivityDAO {
                     ActivityDTO activity = new ActivityDTO();
                     activity.setId(resultSet.getInt("id_actividad"));
                     activity.setTitle(resultSet.getString("titulo"));
-                    activity.setDeadline(resultSet.getTimestamp("fecha_limite"));
+                    activity.setDeadline(resultSet.getTimestamp("fecha_limite").toLocalDateTime());
                     activity.setDescription(resultSet.getString("descripcion"));
                     activity.setProfessorId(resultSet.getInt("id_profesor"));
                     activities.add(activity);
