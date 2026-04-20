@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package spp.domain.dto;
 
 import java.time.LocalDateTime;
@@ -10,11 +6,12 @@ public class ProjectActivityDTO {
     private int id;
     private String name;
     private String description;
-    private double plannedTime;
-    private double realTime;
-    private double openingDate; // Hace match con fecha_apertura DECIMAL(4,1)
-    private double closingDate; // Hace match con fecha_cierre DECIMAL(4,1)
-    private int projectId;
+    private LocalDateTime openingDate;
+    private LocalDateTime closingDate;
+    private int plannedTime;
+    private LocalDateTime realStartDate;
+    private LocalDateTime realEndDate;
+    private Integer projectId;
 
     public ProjectActivityDTO() {
     }
@@ -43,45 +40,54 @@ public class ProjectActivityDTO {
         this.description = description;
     }
 
-    public double getPlannedTime() {
-        return plannedTime;
-    }
-
-    public void setPlannedTime(double plannedTime) {
-        this.plannedTime = plannedTime;
-    }
-
-    public double getRealTime() {
-        return realTime;
-    }
-
-    public void setRealTime(double realTime) {
-        this.realTime = realTime;
-    }
-
-    public double getOpeningDate() {
+    public LocalDateTime getOpeningDate() {
         return openingDate;
     }
 
-    public void setOpeningDate(double openingDate) {
+    public void setOpeningDate(LocalDateTime openingDate) {
         this.openingDate = openingDate;
     }
 
-    public double getClosingDate() {
+    public LocalDateTime getClosingDate() {
         return closingDate;
     }
 
-    public void setClosingDate(double closingDate) {
+    public void setClosingDate(LocalDateTime closingDate) {
         this.closingDate = closingDate;
     }
 
-    public int getProjectId() {
+    public int getPlannedTime() {
+        return plannedTime;
+    }
+
+    public void setPlannedTime(int plannedTime) {
+        this.plannedTime = plannedTime;
+    }
+
+    public LocalDateTime getRealStartDate() {
+        return realStartDate;
+    }
+
+    public void setRealStartDate(LocalDateTime realStartDate) {
+        this.realStartDate = realStartDate;
+    }
+
+    public LocalDateTime getRealEndDate() {
+        return realEndDate;
+    }
+
+    public void setRealEndDate(LocalDateTime realEndDate) {
+        this.realEndDate = realEndDate;
+    }
+
+    public Integer getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
-
+    
+    
     
 }
