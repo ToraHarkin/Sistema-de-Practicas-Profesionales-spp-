@@ -1,10 +1,14 @@
 package spp.domain.dto;
 
+
+import spp.domain.enums.StatusUser;
+
+
 public class UserDTO {
     private int id;
     private String password;
     private String account;
-    private String status;
+    private StatusUser status;
 
     public UserDTO() {
     }
@@ -33,11 +37,11 @@ public class UserDTO {
         this.account = account;
     }
 
-    public String getStatus() {
+    public StatusUser getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusUser status) {
         this.status = status;
     }
 }
