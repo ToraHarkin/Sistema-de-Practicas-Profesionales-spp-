@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import spp.data.exception.ConfigurationException;
+import spp.domain.enums.StatusUser;
 
 
 /**
@@ -31,7 +32,7 @@ public class UserDAOImplementation implements UserDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getPassword());
             preparedStatement.setString(2, user.getAccount());
-            preparedStatement.setString(3, user.getStatus());
+            preparedStatement.setString(3, user.getStatus().getDatabaseValue());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
             throw new PersistenceException("Error registering the new user account.", e);
@@ -57,7 +58,7 @@ public class UserDAOImplementation implements UserDAO {
                     user.setId(resultSet.getInt("id_usuario"));
                     user.setPassword(resultSet.getString("contraseña"));
                     user.setAccount(resultSet.getString("cuenta"));
-                    user.setStatus(resultSet.getString("estado"));
+                    user.setStatus(StatusUser.fromDatabaseValue(resultSet.getString("estado")));
                     return user;
                 }
             }
