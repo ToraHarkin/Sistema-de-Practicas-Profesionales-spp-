@@ -43,10 +43,7 @@ public class MessageDAOTest {
      */
     @Test
     void testSaveMessageSuccess() throws PersistenceException {
-        // Llamamos a tu método save que devuelve un boolean
         boolean result = messageDAO.save(testMessage);
-        
-        // Verificamos que el resultado sea true
         assertTrue(result, "El mensaje debería guardarse en el sistema correctamente y retornar true.");
     }
 }

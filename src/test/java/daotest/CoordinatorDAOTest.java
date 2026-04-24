@@ -48,10 +48,7 @@ public class CoordinatorDAOTest {
      */
     @Test
     void testSaveCoordinatorSuccess() throws PersistenceException {
-        // Execute the save operation
         boolean result = coordinatorDAO.save(testCoordinator);
-        
-        // Assert that the operation was successful
         assertTrue(result, "The coordinator should be saved successfully and return true.");
     }
 }

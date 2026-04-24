@@ -46,7 +46,6 @@ public class ProfessorDAOTest {
     void testInactivateProfessorSuccess() throws PersistenceException {
         String personalNumberToInactivate = "99999"; 
         
-
         boolean result = professorDAO.inactivate(personalNumberToInactivate);
         assertTrue(result, "El estado del profesor debería actualizarse a Inactivo.");
     }
