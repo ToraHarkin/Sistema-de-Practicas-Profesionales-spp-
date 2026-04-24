@@ -27,11 +27,11 @@ public class UserDAOImplementation implements UserDAO {
      */
     @Override
     public boolean save(UserDTO user) throws PersistenceException {
-        String query = "INSERT INTO usuario (contraseña, cuenta, estado, fecha_registro) VALUES (?, ?, ?, NOW())";
+        String query = "INSERT INTO usuario (cuenta, contraseña, estado, fecha_registro) VALUES (?, ?, ?, NOW())";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, user.getPassword());
-            preparedStatement.setString(2, user.getAccount());
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, user.getAccount());
+            preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getStatus().getDatabaseValue());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException | ConfigurationException e) {
@@ -56,8 +56,8 @@ public class UserDAOImplementation implements UserDAO {
                 if (resultSet.next()) {
                     UserDTO user = new UserDTO();
                     user.setId(resultSet.getInt("id_usuario"));
-                    user.setPassword(resultSet.getString("contraseña"));
                     user.setAccount(resultSet.getString("cuenta"));
+                    user.setPassword(resultSet.getString("contraseña"));
                     user.setStatus(StatusUser.fromDatabaseValue(resultSet.getString("estado")));
                     return user;
                 }
@@ -80,7 +80,7 @@ public class UserDAOImplementation implements UserDAO {
     public boolean updateStatus(int userId, String status) throws PersistenceException {
         String query = "UPDATE usuario SET estado = ? WHERE id_usuario = ?";
         try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, userId);
             return preparedStatement.executeUpdate() > 0;
