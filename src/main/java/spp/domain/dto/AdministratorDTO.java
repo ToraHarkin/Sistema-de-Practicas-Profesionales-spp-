@@ -28,6 +28,8 @@ public class AdministratorDTO {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+    
+    
 
     
 }
