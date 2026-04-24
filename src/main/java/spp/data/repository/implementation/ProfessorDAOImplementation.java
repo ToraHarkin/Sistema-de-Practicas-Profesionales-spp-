@@ -128,4 +128,24 @@ public class ProfessorDAOImplementation implements ProfessorDAO {
         }
         return professors;
     }
+    
+    /**
+     * Inactivates a professor by updating the linked user's status to 'Inactivo'.
+     *
+     * @param personalNumber The university identification number.
+     * @return true if updated successfully.
+     * @throws PersistenceException If an SQL error occurs.
+     */
+    @Override
+    public boolean inactivate(String personalNumber) throws PersistenceException {
+        // Actualizamos el estado en la tabla usuario usando el id vinculado al profesor
+        String query = "UPDATE usuario SET estado = 'Inactivo' WHERE id_usuario = (SELECT id_usuario FROM profesor WHERE numero_personal = ?)";
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, personalNumber);
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException | ConfigurationException e) {
+            throw new PersistenceException("Error inactivating the professor.", e);
+        }
+    }
 }

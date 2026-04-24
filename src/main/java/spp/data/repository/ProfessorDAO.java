@@ -11,4 +11,5 @@ public interface ProfessorDAO {
     boolean update(ProfessorDTO professor) throws PersistenceException;
     ProfessorDTO getByPersonalNumber(String personalNumber) throws PersistenceException;
     List<ProfessorDTO> getAll() throws PersistenceException;
+    boolean inactivate(String personalNumber) throws PersistenceException;
 }
