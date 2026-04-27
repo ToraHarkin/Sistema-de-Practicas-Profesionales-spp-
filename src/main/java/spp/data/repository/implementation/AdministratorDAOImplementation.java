@@ -114,4 +114,23 @@ public class AdministratorDAOImplementation implements AdministratorDAO {
         }
         return admins;
     }
+    
+    @Override
+    public boolean existsAdministrator() throws PersistenceException {
+        String query = "SELECT COUNT(*) FROM administrador";
+
+        try (Connection connection = ConnectionPool.getInstanceConectionPool().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+        } catch (SQLException | ConfigurationException e) {
+            throw new PersistenceException("Error checking administrators.", e);
+        }
+
+        return false;
+    }
 }
