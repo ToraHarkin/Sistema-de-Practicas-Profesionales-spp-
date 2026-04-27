@@ -1,8 +1,16 @@
 package daotest;
 
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 import spp.data.connection.ConnectionPool;
 import spp.data.repository.implementation.UserDAOImplementation;
@@ -76,7 +84,7 @@ public class UserDAOImplementationTest {
     }
     
     @Test
-    void Should_RegisterUser_When_EnteringUserData() throws PersistenceException{
+    void Should_ReturnTrue_When_UserIsSaved() throws PersistenceException{
         UserDTO testUser = new UserDTO();
         testUser.setAccount(TEST_ACCOUNT);
         testUser.setPassword(TEST_PASSWORD);

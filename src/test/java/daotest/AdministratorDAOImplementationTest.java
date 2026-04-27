@@ -3,7 +3,10 @@ package daotest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import spp.data.connection.ConnectionPool;
 import spp.data.repository.implementation.AdministratorDAOImplementation;
@@ -114,6 +117,18 @@ public class AdministratorDAOImplementationTest {
         
         assertEquals(testExpectedAdmin,adminObtained);
 
+    }
+    
+    @Test
+    void Should_ReturnTrue_When_AdministratorIsSaved() {
+        UserDTO userCreated = userTestHelperDAO.getByAccount(TEST_ACCOUNT);
+        AdministratorDTO testAdmin = new AdministratorDTO();
+        testAdmin.setUserAccount(TEST_ACCOUNT);
+        testAdmin.setUserId(userCreated.getId());
+        
+        boolean resultTest = administratorDAO.save(testAdmin);
+        
+        assertTrue(resultTest);
     }
     
     @Test
