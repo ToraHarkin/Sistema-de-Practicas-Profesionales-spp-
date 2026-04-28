@@ -12,4 +12,5 @@ public interface AdministratorDAO {
     boolean update(AdministratorDTO admin) throws PersistenceException;
     AdministratorDTO getByUserAccount(String userAccount) throws PersistenceException;
     List<AdministratorDTO> getAll() throws PersistenceException;
+    public boolean existsAdministrator() throws PersistenceException;
 }
