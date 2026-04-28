@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+
+.main-container {
+    -fx-background-color: #F8FAFC;
+    -fx-padding: 48 40 0 40;
+    -fx-pref-width: infinity;
+    -fx-pref-height: infinity;
+}
+
+.header-section {
+    -fx-padding: 0 0 36 0;
+}
+
+.univer-label {
+    -fx-font-family: 'Open Sans';
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #005BAA;
+}
+
+.title-label {
+    -fx-font-family: 'Open Sans';
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B3C;
+    -fx-text-alignment: center;
+}
+
+.subtitle-label {
+    -fx-font-family: 'Open Sans';
+    -fx-font-size: 15px;
+    -fx-text-fill: #5A6A7A;
+}
+
+.center-section {
+    -fx-padding: 0 0 28 0;
+}
+
+.initial-config-button {
+    -fx-background-color: #005BAA;
+    -fx-text-fill: white;
+    -fx-font-family: 'Open Sans';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 12 24 12 24;
+    -fx-pref-width: 320px;
+}
+
+.initial-config-button:hover {
+    -fx-background-color: #004A8F;
+}
+
+.description-label {
+    -fx-font-family: 'Open Sans';
+    -fx-font-size: 12px;
+    -fx-text-fill: #8A9AAA;
+    -fx-text-alignment: center;
+}
+
+.footer-section {
+    -fx-padding: 0;
+}
