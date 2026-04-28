@@ -8,19 +8,39 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import spp.data.exception.ConfigurationException;
+import spp.data.exception.PersistenceException;
+import spp.data.repository.implementation.AdministratorDAOImplementation;
 
-/**
- * JavaFX App
- */
+
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("RegisterProfessor"), 640, 480);
+        String initialView = determinateInitialView();
+        scene = new Scene(loadFXML(initialView));
         stage.setScene(scene);
         stage.show();
+    }
+    
+    private String determinateInitialView(){ 
+        try {
+            AdministratorDAOImplementation adminDAO = 
+                    new AdministratorDAOImplementation();
+            
+            boolean existAdmin = adminDAO.existsAdministrator();
+            
+            if(existAdmin) {
+                return "welcome";
+            } else {
+                return "welcome";
+            }
+        } catch(PersistenceException e) {
+            System.out.println("ERROR: No se pudo validar existencia de administradores.");
+            System.out.println("Detalles: " + e.getMessage());
+            return "welcome";
+        }
     }
 
     public static void setRoot(String fxml) throws IOException {
